@@ -1,0 +1,135 @@
+---
+- name: "FMCLI Ports Configuration "
+  hosts: leaf01
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic_fmcli
+  
+  tasks:
+  # - name: show run data download
+  #   sonic_command:
+  #      commands: 'show run'
+  # - name: Print ansible_host value
+    - debug: msg="ansible_host value for {{ inventory_hostname }} is {{ ansible_host }}"
+
+    # - name: SONiC port configuration with wait_for and match=any
+    #   sonic_interfaces:
+    #     config:
+    #       - interface: ["Ethernet32","Ethernet4"]
+    #         mtu: 9000
+    #         enable: True
+    #         description: "fmcli description_port"
+    #       - interface: 'Ethernet36'
+    #         mtu: 9000
+    #         fec: rs
+    #         enable: True
+    #         ip_address: 10.4.4.4/23
+    #         description: "fmcli description_port_list2"
+    
+    # - name: SONiC port configuration
+    #   sonic_interfaces:
+    #     config:
+    #       - interface: 'Ethernet36'
+    #         mtu: 9100
+    #         enable: False
+    #         # description: "fmcli description_port_list2"
+    #         description: "fmcli description_port_"
+    
+    # - name: SONiC loopback configuration merge
+    #   sonic_loopback:
+    #     config:
+    #       - loopback: 1
+    #         ip_address: 10.4.5.8/23
+    #       - loopback: 2
+    #         ip_address: 10.4.5.7/23
+    #       - loopback: 3
+    #       - loopback: 4
+    #         ip_address: 10.4.5.10/23
+
+    
+    # - name: SONiC loopback configuration replace
+    #   sonic_loopback:
+    #     config:
+    #       - loopback: 1
+    #         ip_address: 10.4.5.8/23
+    #       - loopback: 2
+    #         ip_address: 10.4.5.6/23
+    #       - loopback: 3
+    #         ip_address: 10.4.5.9/23
+    #     state: replace
+    
+    # - name: SONiC loopback configuration delete
+    #   sonic_loopback:
+    #     config:
+    #       - loopback: 2
+    #         ip_address: 10.4.5.6/23
+    #       - loopback: 3
+    #       - loopback: 4
+    #     state: delete
+    
+    # - name: SONiC svi configuration merge
+    #   sonic_svi:
+    #     config:
+    #       - vlan_id: 10
+    #         ip_address: 10.4.5.6/23
+    #       - vlan_id: 20
+    #         ip_address: 10.4.5.7/23
+    #       - vlan_id: 30
+    #       - vlan_id: 40
+    #         ip_address: 10.4.5.10/23
+
+    - name: "day-1 Add member port to port-channel configuration"
+      sonic_port_channel:
+        config:
+          - pch_id: 10
+            mtu: '9100'
+            interfaces: ["Ethernet4", "Ethernet32"]
+            description: "pch description"
+    
+    - name: "day-2 same config Add member port to port-channel configuration"
+      sonic_port_channel:
+        config:
+          - pch_id: 10
+            mtu: '9100'
+            interfaces: ["Ethernet4", "Ethernet32"]
+            description: "pch description day2"
+
+    - name: "day-3 mtu update Add member port to port-channel configuration"
+      sonic_port_channel:
+        config:
+          - pch_id: 10
+            mtu: '9000'
+            interfaces: ["Ethernet4", "Ethernet32"]
+            description: "pch description day2"
+
+    - name: "day-4 adding new interface Add member port to port-channel configuration"
+      sonic_port_channel:
+        config:
+          - pch_id: 10
+            mtu: '9000'
+            interfaces: ["Ethernet4", "Ethernet32", "Ethernet36"]
+            description: "pch description day2"    
+    
+    - name: "day-n no update port-channel"
+      sonic_port_channel:
+        config:
+          - pch_id: 10
+            mtu: '9000'
+            interfaces: ["Ethernet4", "Ethernet32", "Ethernet36"]
+            description: "pch description day2" 
+
+    - name: "delete day-n no update port-channel"
+      sonic_port_channel:
+        config:
+          - pch_id: 10
+            mtu: '9000'
+            interfaces: ["Ethernet4", "Ethernet32", "Ethernet36"]
+            description: "pch description day2" 
+        state: delete
+    
+    
+    
+
+
+    

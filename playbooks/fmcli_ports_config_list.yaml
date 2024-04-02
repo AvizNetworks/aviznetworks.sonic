@@ -1,0 +1,49 @@
+---
+- name: "FMCLI Ports Configuration "
+  hosts: allLEAFS # 10.4.4.66, 10.4.4.68
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic_fmcli
+  
+  tasks:
+
+  - name: SONiC port configuration with wait_for and match=any
+    sonic_ports_list:
+      config:
+        # - interface: ["Ethernet32","Ethernet0"]
+        - interface: ["Ethernet32","Ethernet4"]
+          mtu: 9000
+          enable: True
+          description: "fmcli description_port_list1"
+        - interface: 'Ethernet36'
+          mtu: 9000
+          enable: True
+          description: "fmcli description_port_list2"
+  - name: SONiC port delete configuration
+    sonic_ports_list:
+      config:
+        - interface: "Ethernet4"
+          description: "fmcli description_port_list1"
+          mtu: 9000
+      state: delete
+      # wait_for:
+      #   - result[6] contains "Saving Configuration"
+      # match: any 
+    register: cmd_op
+  
+  # - name: SONiC port configuration
+  #   sonic_ports: 
+  #     config:                              # oper 0
+  #       - interface: 'Ethernet36'                  # oper 1
+  #         mtu: 9100                                # oper 2
+  #         enable: True                             # oper 3
+  #         description: "fmcli description_eth36"   # oper 4
+  #     # wait_for:                                # oper 5,6 -> end, save
+  #     # #  - result[1] contains config-if
+  #     #   - result[6] contains "Saving Configuration"
+  #   # diff: true   
+  #   register: cmd_op
+
+
+  

@@ -1,0 +1,37 @@
+---
+# ANSIBLE_NETWORK_GROUP_MODULES=sonic ansible-playbook playbooks/common_examples/fmcli_ports_config.yaml -i inventory/nvidia_host -vvv
+- name: "FMCLI Ports Configuration "
+  hosts: allLEAFS # 10.4.4.66, 10.4.4.68
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic_fmcli
+  
+  tasks:
+
+  - name: SONiC port configuration with wait_for and match=any
+    sonic_ports:
+      interface: 'Ethernet32'                  # oper 1
+      mtu: 9000                                # oper 2
+      enable: true                             # oper 3
+      description: "fmcli description_eth32"   # oper 4
+      wait_for:                                # oper 5,6 -> end, save
+        - result[1] contains config-if
+        - result[6] contains "Saving Configuration"
+      match: any 
+    register: cmd_op
+ 
+  - name: SONiC port configuration
+    sonic_ports:                               # oper 0
+      interface: 'Ethernet36'                  # oper 1
+      mtu: 9100                                # oper 2
+      enable: true                             # oper 3
+      description: "fmcli description_eth36"   # oper 4
+      wait_for:                                # oper 5,6 -> end, save
+      #  - result[1] contains config-if
+        - result[6] contains "Saving Configuration"
+    # diff: true   
+    register: cmd_op
+
+
+  

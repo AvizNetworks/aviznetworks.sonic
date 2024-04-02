@@ -1,0 +1,143 @@
+---
+
+ansible_user: admin
+ansible_password: YourPaSsWoRd 
+ansible_network_os: aviznetworks.sonic_fmcli.sonic
+ansible_connection: network_cli
+ansible_python_interpreter: /usr/bin/python3
+mtu: 9000
+
+vlan:
+  vlan100: 300
+  vlan200: 200
+
+# spine leaf connection
+
+#    spine01 ===== spine02
+#      ||      X     ||
+#     leaf01 ===== leaf02
+
+
+# interface:
+#   leaf01:
+#     # to leaf02
+#     leaf02_inf1: 'Ethernet32'
+#     leaf02_inf2: 'Ethernet36'
+
+#     # to spine01
+#     spine01_inf1: 'Ethernet0'
+#     spine01_inf2: 'Ethernet4'
+
+#     # to spine02
+#     spine02_inf1: 'Ethernet16'
+#     spine02_inf2: 'Ethernet20'
+  
+#   leaf02:
+#     # to leaf01
+#     leaf01_inf1: 'Ethernet32'
+#     leaf01_inf2: 'Ethernet36'
+
+#     # to spine01
+#     spine01_inf1: 'Ethernet24'
+#     spine01_inf2: 'Ethernet28'
+    
+#     # to spine02
+#     spine02_inf1: 'Ethernet0'
+#     spine02_inf2: 'Ethernet4'
+  
+#   spine01:
+#     # to leaf01
+#     leaf01_inf1: 'Ethernet0'
+#     leaf01_inf2: 'Ethernet4'
+
+#     # to leaf02
+#     leaf02_inf1: 'Ethernet24'
+#     leaf02_inf2: 'Ethernet28'
+
+#     # to spine02
+#     spine02_inf1: 'Ethernet32'
+#     spine02_inf2: 'Ethernet36'
+  
+#   spine02:
+#     # to leaf01
+#     leaf01_inf1: 'Ethernet16'
+#     leaf01_inf2: 'Ethernet20'
+
+#     # to leaf02
+#     leaf02_inf1: 'Ethernet0'
+#     leaf02_inf2: 'Ethernet4'
+
+#     # to spine01
+#     spine01_inf1: 'Ethernet32'
+#     spine01_inf2: 'Ethernet36'
+
+
+host_data:
+  host_interface:
+    leaf01:
+      inf1: 'Ethernet32'
+      inf2: 'Ethernet36'
+      inf3: 'Ethernet0'
+      inf4: 'Ethernet4'
+      inf5: 'Ethernet16'
+      inf6: 'Ethernet20'
+    
+    leaf02:
+      inf1: 'Ethernet32'
+      inf2: 'Ethernet36'
+      inf3: 'Ethernet24'
+      inf4: 'Ethernet28'
+      inf5: 'Ethernet0'
+      inf6: 'Ethernet4'
+
+    spine01:
+      inf1: 'Ethernet32'
+      inf2: 'Ethernet36'
+      inf3: 'Ethernet24'
+      inf4: 'Ethernet28'
+      inf5: 'Ethernet0'
+      inf6: 'Ethernet4'
+    
+    spine02:
+      inf1: 'Ethernet32'
+      inf2: 'Ethernet36'
+      inf3: 'Ethernet16'
+      inf4: 'Ethernet20'
+      inf5: 'Ethernet0'
+      inf6: 'Ethernet4'
+
+intf1: "{{ host_data.host_interface[inventory_hostname].inf1 }}"
+intf2: "{{ host_data.host_interface[inventory_hostname].inf2 }}"
+intf3: "{{ host_data.host_interface[inventory_hostname].inf3 }}"
+intf4: "{{ host_data.host_interface[inventory_hostname].inf4 }}"
+intf5: "{{ host_data.host_interface[inventory_hostname].inf5 }}"
+intf6: "{{ host_data.host_interface[inventory_hostname].inf6 }}"
+
+
+
+devices:
+  children:
+    leafs:
+      children:
+        leaf01:
+          hosts:
+            10.4.4.66:
+        leaf02:
+          hosts:
+            10.4.4.68:
+    spines:
+      children:
+        spine01:
+          hosts:
+            10.4.4.65
+        spine02:
+          hosts:
+            10.4.4.67
+  vars:
+    ansible_connection: network_cli
+    ansible_user: admin
+    ansible_ssh_pass: YourPaSsWoRd
+    ansible_network_os: aviznetworks.sonic_fmcli.sonic
+    ansible_python_interpreter: /usr/bin/python3
+        
+

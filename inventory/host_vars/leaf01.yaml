@@ -1,0 +1,38 @@
+---
+
+# here need to provide the variable which is applied to all devices with diff value
+# example hostname, 
+
+hostname:
+  name: "abc"
+
+interface:
+  inf1: 'Ethernet0'
+  inf2: 'Ethernet4'
+  inf3: 'Ethernet8'
+  inf4: 'Ethernet12'
+  inf5: 'Ethernet16'
+  inf6: 'Ethernet20'
+  inf7: 'Ethernet24'
+  inf8: 'Ethernet28'
+
+# ansible_user: admin # consider different credential for the devices
+# ansible_password: ""
+
+
+
+# interface:
+#   # leaf01 ==== leaf02
+#   inf1: 'Ethernet32'
+#   inf2: 'Ethernet36'
+
+#   # leaf01 ==== spine01 
+#   inf3: 'Ethernet0'
+#   inf4: 'Ethernet4'
+
+#   # leaf01 ==== spine02 
+#   inf5: 'Ethernet16'
+#   inf6: 'Ethernet20'
+
+description: "leaf01 interface description"
+  

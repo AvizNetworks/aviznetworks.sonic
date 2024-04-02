@@ -1,0 +1,27 @@
+---
+- name: "FMCLI Ports Configuration "
+  hosts: allLEAFS
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic_fmcli
+  
+  tasks:
+  - name: SONiC port delete configuration
+    sonic_ports_list:
+      config:
+        - interface: "Ethernet4"
+          description: "fmcli description_port_list1"
+          mtu: 9000
+      state: delete
+    register: cmd_op
+
+  - name: SONiC port delete configuration
+    sonic_ports_list:
+      config:
+        - interface: "Ethernet32"
+      state: delete
+    register: cmd_op  
+
+
+  
