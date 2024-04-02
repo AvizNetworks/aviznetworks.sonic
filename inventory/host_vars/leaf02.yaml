@@ -1,0 +1,12 @@
+---
+
+# here need to provide the variable which is applied to all devices with diff value
+# example hostname, 
+
+hostname:
+  name: "leaf02"
+
+interface:
+  inf1: 'Ethernet32'
+
+description: "leaf02 interface description"

@@ -1,0 +1,9 @@
+---
+
+# here need to provide the variable which is applied to all devices with diff value
+# example hostname, 
+
+hostname:
+  name: "spine01"
+
+description: "{{ hostname.name }} interface description"

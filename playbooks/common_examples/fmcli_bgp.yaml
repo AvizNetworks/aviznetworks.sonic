@@ -1,0 +1,85 @@
+---
+- name: "FMCLI Ports Configuration "
+  hosts: leaf01
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic_fmcli
+  
+  tasks:
+  # - name: show run data download
+  #   sonic_command:
+  #      commands: 'show run'
+  # - name: Print ansible_host value
+    - debug: msg="ansible_host value for {{ inventory_hostname }} is {{ ansible_host }}"
+
+    - name: Sonic router BGP config
+      sonic_bgp_neighbor:
+        config:
+          bgp_asn: 2001
+          neighbor:
+            - ip: 40.0.0.2
+              remote_as: 1002
+              extended_nexthop: True
+            - ip: 40.0.0.1
+              remote_as: 1003
+              extended_nexthop: True
+            # extended_nexthop: True/False/None #extended-nexthop
+            # peer_group_name: "pgname" #peer-group
+            # shoutdown: True/False/None
+            # timers:
+            #   keepalive: 10/None
+            #   holdtime: 10/None #if keepalive: 10, the holddown timmer must be there
+            # bfd: True/False/None # always execute after remote-as or peer-group_name
+            # update_source: #update-source
+            #   interface: ifname
+            #   portchannel: pch_name
+          # - neighbor:
+          #   ip: 40.0.0.0
+          #   remote_as: 1005 #remote_as
+          #   extended_nexthop: True/False/None #extended-nexthop
+          #   peer_group_name: "pgname" #peer-group
+          #   shoutdown: True/False/None
+          #   timers:
+          #     keepalive: 10/None
+          #     hold: 10/None #if keepalive: 10, the holddown timmer must be there
+          #   bfd: True/False/None # always execute after remote-as or peer-group_name
+          #   update_source: #update-source
+          #     interface: ifname
+          #     portchannel: pch_name
+          # - neighbor:  
+          #     ip: 40.0.0.1
+          #     remote_as: 1003 #remote_as
+          #     extended_nexthop: True/False/None #extended-nexthop
+          #     peer_group_name: "pgname" #peer-group
+          #     shoutdown: True/False/None
+          #     timers:
+          #       keepalive: 10/None
+          #       hold: 10/None #if keepalive: 10, the holddown timmer must be there
+          #     bfd: True/False/None # always execute after remote-as or peer-group_name
+          #     update_source: #update-source
+          #       interface: ifname
+          #       portchannel: pch_name
+          
+          #   - bgp:
+          #     router_id: 10.4.4.4 #router-id
+          #     bestpath: as-path/compare-routerid # bgp bestpath compare-routerid / bgp bestpath as-path multipath-relax
+          #     restart_time: 10 # bgp graceful-restart restart-time 10
+          #     stalepath_time: 10 # bgp graceful-restart stalepath-time 10
+
+          #   - address_family: # address-family
+          #     - ipv4/ipv6: #address-family ipv4 unicast
+          #       - neighbor:
+          #         ip: 10.4.4.4
+          #         allowas-in: 1 to 10 or origin
+          #         activate: True/False/None
+          #       - network:
+          #         ip: 10.4.4.4
+          #         mask: 31 # check if ip and mask both, -> network ip/mask
+          #       - redistribute: connected and static # both should be there without key value
+          #     - l2vpn: #address-family ipv4 unicast
+          #       - neighbor:
+          #         ip: 10.4.4.4
+          #         allowas-in: 1 to 10 or origin
+          #         activate: True/False/None
+          #       - advertise-all-vni # add without key value check

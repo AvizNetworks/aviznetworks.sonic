@@ -1,0 +1,16 @@
+leaf01 ansible_host=10.4.4.66
+leaf02 ansible_host=10.4.4.68
+spine01 ansible_host=10.4.4.65
+spine02 ansible_host=10.4.4.67
+
+[leafs]
+leaf01
+leaf02
+
+[spines]
+spine01
+spine02
+
+[all:vars]
+ansible_network_os=aviznetworks.sonic_fmcli.sonic
+ansible_python_interpreter=/usr/bin/python3 
