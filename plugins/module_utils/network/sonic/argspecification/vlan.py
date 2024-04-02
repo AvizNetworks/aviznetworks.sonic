@@ -14,10 +14,13 @@ class VlanArgs(object):
             "elements": "dict",
             "options": {
                 "vlan_id": {"type": "list", "required": True},
-                "interface": {"type": "list", "default": None},
+                "description": {"type": "str"},
+                "vrf_member": {"type": "str"},
+                "interface": {"type": "list", "default": None}, # portchannel10 / Ethernet10
                 "vlan_mode": {"type": "str", "default": None},
                 "ipaddress": {"type": "str", "default": None},
                 "enableswitchport": {"type": "bool", "default": True},
+                
             },
             "type": "list"
         },
