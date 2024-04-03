@@ -1,0 +1,44 @@
+---
+- name: "FMCLI Ports Configuration "
+  hosts: LEAF02 
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic_fmcli
+  
+  tasks:
+  - name: Unconfigure trunk port on the physical interface
+    sonic_vlan:
+      config: 
+        - interface: ['Ethernet64','Ethernet128']                            
+          vlan_id: ['100','200','300']              
+          vlan_mode: 'trunk'    
+          enableswitchport: true
+      state: delete  
+
+  - name: Unconfigure access and trunk port on the physical interface
+    sonic_vlan:
+      config: 
+        - interface: ['Ethernet96']                            
+          vlan_id: ['100']              
+          vlan_mode: 'access'    
+      state: delete 
+   
+  - name: SONiC port delete configuration
+    sonic_interfaces:
+      config:
+        - interface: ['Ethernet64','Ethernet96','Ethernet128'] 
+          mtu: 9000
+      state: delete
+
+  - name: SONiC port delete configuration
+    sonic_interfaces:
+      config:
+        - interface: ['Ethernet64','Ethernet96','Ethernet128'] 
+      state: delete
+
+  - name: configure vlans
+    sonic_vlan:
+      config: 
+        - vlan_id: ['100','200','300']                        
+      state: delete  
