@@ -1,0 +1,45 @@
+---
+- name: "FMCLI Ports Configuration "
+  hosts: LEAF02 
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic_fmcli
+  
+  tasks:
+  - name: configure vlans
+    sonic_vlan:
+      config: 
+        - vlan_id: ['100','200','300']
+
+  - name: configure ipaddress on vlans
+    sonic_vlan:
+      config: 
+        - vlan_id: 100
+          ipaddress: 100.10.0.1/25
+
+  - name: configuration interface 
+    sonic_interfaces:
+      config:
+        - interface: ["Ethernet64","Ethernet96","Ethernet128"]
+          mtu: 9000
+          enable: True
+          address: 10.10.10.1/24
+
+          
+  - name: Configure trunk port on the physical interface
+    sonic_vlan:
+      config:
+        - interface: ['Ethernet64','Ethernet128'] 
+          vlan_mode: 'trunk'
+          vlan_id: ['100','200','300']
+
+  - name: Configure access port on the physical interface
+    sonic_vlan:
+      config:
+        - interface: ['Ethernet96'] 
+          vlan_mode: 'access'
+          vlan_id: ['100']
+
+
+  
