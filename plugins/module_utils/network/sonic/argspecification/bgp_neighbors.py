@@ -17,7 +17,7 @@ class BGPNeighborsArgs(object):
                 "neighbor": {
                     "elements": "dict",
                     "options": {
-                        "neighbor_ip": {"required": True, "type": "list"},
+                        "ip": {"required": True, "type": "str"},
                         "remote_as": {"type": "str"},
                         "extended_nexthop": {"type": "bool", "default": None},
                         "peer_group_name": {"type": "str"},
@@ -55,4 +55,42 @@ class BGPNeighborsArgs(object):
     }
 
 
-  
+    # argument_spec = {
+    #     "config": {
+    #         "elements": "dict",
+    #         "options": {
+    #             "bgp_asn": {"required": True, "type": "str"},
+    #             "neighbor": {
+    #                 "elements": "dict",
+    #                 "options": {
+    #                     "ip": {"required": True, "type": "str"},
+    #                     "remote_as": {"type": "str"},
+    #                     "extended_nexthop": {"type": "bool", "default": None},
+    #                     "peer_group_name": {"type": "str"},
+    #                     "bfd": {"type": "str"},
+    #                     "shoutdown": {"type": "bool", "default": None},
+    #                     "timers": {
+    #                         "options": {
+    #                             "holdtime": {"type": "int"},
+    #                             "keepalive": {"type": "int"}
+    #                         },
+    #                         "type": "dict"
+    #                     },
+    #                     "update_source": {
+    #                         "options": {
+    #                             "interface": {"type": "str"},
+    #                             "portchannel": {"type": "str"}
+    #                         },
+    #                         "type": "dict"
+    #                     }
+    #                 },
+    #                 "type": "list"
+    #             }
+    #         },
+    #         "type": "list"
+    #     },
+    #     "state": {
+    #         "choices": ["merged", "deleted"],
+    #         "default": "merged"
+    #     }
+    # }
