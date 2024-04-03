@@ -1,0 +1,74 @@
+---
+# ANSIBLE_NETWORK_GROUP_MODULES=sonic ansible-playbook playbooks/common_examples/fmcli_port_channel_config.yaml -i inventory/nvidia_host -vvv
+
+- name: "FMCLI Ports Configuration"
+  hosts: alldevices
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic_fmcli
+
+  tasks:
+  - name: "day-1 Add member port to port-channel configuration"
+    sonic_port_channel:
+      config:
+        - pch_id: 10
+          mtu: '9100'
+          interfaces: ["Ethernet4", "Ethernet32"]
+          description: "pch description"
+          mode: "active"
+    
+  - name: "day-2 same config Add member port to port-channel configuration"
+    sonic_port_channel:
+      config:
+        - pch_id: 10
+          mtu: '9100'
+          interfaces: ["Ethernet4", "Ethernet32"]
+          description: "pch description day2"
+          mode: "active"
+
+  - name: "day-3 mtu update Add member port to port-channel configuration"
+    sonic_port_channel:
+      config:
+        - pch_id: 10
+          mtu: '9000'
+          interfaces: ["Ethernet4", "Ethernet32"]
+          description: "pch description day2"
+          mode: "active"
+
+  - name: "day-4 adding new interface Add member port to port-channel configuration"
+    sonic_port_channel:
+      config:
+        - pch_id: 10
+          mtu: '9000'
+          interfaces: ["Ethernet4", "Ethernet32", "Ethernet36"]
+          description: "pch description day2"    
+          #mode: "active"
+  
+  - name: "day-n no update port-channel"
+    sonic_port_channel:
+      config:
+        - pch_id: 10
+          mtu: '9000'
+          interfaces: ["Ethernet4", "Ethernet32", "Ethernet36"]
+          description: "pch description day2" 
+          mode: "active" 
+  
+  # - name: "day-1 remove member port from port-channel configuration"
+  #   sonic_port_channel:
+  #     config:
+  #       - pch_id: 10
+  #         mtu: '9100'
+  #         interfaces: ["Ethernet4", "Ethernet32"] #, "Ethernet36"]
+  #         description: "pch description"
+  #         # mode: "active"
+  #     state: delete
+
+
+
+
+
+
+
+
+

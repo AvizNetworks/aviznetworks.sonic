@@ -1,0 +1,64 @@
+# ANSIBLE_NETWORK_GROUP_MODULES=sonic ansible-playbook playbooks/common_examples/fmcli_port_channel_config.yaml -i inventory/nvidia_host -vvv
+
+- name: "FMCLI Ports Configuration"
+  hosts: alldevices
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic_fmcli
+
+  tasks:
+  - name: "day-1 remove member port from port-channel configuration"
+    sonic_port_channel:
+      config:
+        - pch_id: 10
+          mtu: '9100'
+          interfaces: ["Ethernet4", "Ethernet32"]
+          description: "pch description"
+          mode: "active"
+      state: delete
+
+  - name: "day-1 remove member port from port-channel configuration"
+    sonic_port_channel:
+      config:
+        - interfaces: ["Ethernet4", "Ethernet32"]
+          mtu: '9100'
+          pch_id: 10
+          mode: "active"
+      state: delete
+    
+  - name: "Unconfigure sonic port-channel members"
+    sonic_port_channel:
+      config:
+        - mem_interfaces_list: ['Ethernet8','Ethernet16']
+          rem_pch_id: 10
+          mtu: '9100'
+          mode: 'active'
+      state: delete
+
+  - name: "Remove sonic port-channel members directly"
+    sonic_port_channel:
+      config:
+        - members: ['Ethernet8','Ethernet16']
+      state: delete
+
+  - name: "Unconfigure sonic port-channel"
+    sonic_port_channel:
+      config:
+        - chg_mem_interfaces: ['Ethernet4']
+          new_pch_id: 20
+          mode: 'active'
+      state: delete
+
+  - name: "Unconfigure sonic port-channel"
+    sonic_port_channel:
+      config:
+        - chg_mem_interfaces: ['Ethernet4']
+      state: delete
+
+  - name: "Unconfigure sonic port-channel"
+    sonic_port_channel:
+      config:
+        - pch_id: [10,20,30]
+      state: delete
+
