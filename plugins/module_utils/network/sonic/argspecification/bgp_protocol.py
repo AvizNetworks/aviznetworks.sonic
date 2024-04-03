@@ -6,27 +6,18 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-class BGPArgs(object):
+class BGPProtocolArgs(object):
     def __init__(self, **kwargs):
         pass
 
     argument_spec = {
         "config": {
             "options": {
-                "bgp_asn": {"required": True, "type": "str"},
-                "bgp": {
-                    "elements": "dict",
-                    "options": {
-                        "router_id": {"type": "str"},
-                        "bestpath": {"type": "bool", "default": None},
-                        "ebgp_requires_policy" : {"type": "bool", "default": False},
-                        "restart_time": {"type": "int", "default": None},
-                        "stalepath_time": {"type": "int", "default": None},
-                    },
-                    "type": "list"
-                }
+                "protocol_bgp_route_map_name": {"type": "str"},
+                "permit_no": {"type": "int"},
+                "src_ip": {"type": "str"},
             },
-            "type": "dict"
+            "type": "list"
         },
         "state": {
             "choices": ["merged", "deleted"],
