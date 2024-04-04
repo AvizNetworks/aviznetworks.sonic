@@ -117,10 +117,10 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     EntityCollection,
     to_lines,
 )
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.sonic import run_commands
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.utils.utils import command_list_str_to_dict
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.configs.interfaces import InterfaceConfig
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.argspecification.interfaces import InterfacesArgs
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.sonic import run_commands
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.utils import command_list_str_to_dict
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.configs.interfaces import InterfaceConfig
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.argspecification.interfaces import InterfacesArgs
 
 
 def transform_commands_dict(module, commands_dict):

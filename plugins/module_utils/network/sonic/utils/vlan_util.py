@@ -20,11 +20,11 @@ except Exception as e:
     ERR_MSG = to_native(e)
     LIB_IMP_ERR = traceback.format_exc()
 
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.sonic import (
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.sonic import (
     to_request,
     edit_config
 )
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.utils.utils import (
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.utils import (
     get_substring_starstwith_matched_item_list, 
     substring_starstwith_check)
 
@@ -51,7 +51,7 @@ def config_vlans(module_config, config_list, diff={}, key=""):
       commands.append("config terminal")
       if key in config_list["vlan"]:
         if module_config["vrf_member"]:
-            cmd = f"vrf member {module_config["vrf_member"]}"
+            cmd = f"vrf member {module_config['vrf_member']}"
             commands.append(key)
             if cmd in config_list["vlan"][key]:
                 commands = commands[:-1]
@@ -70,7 +70,7 @@ def config_vlans(module_config, config_list, diff={}, key=""):
           commands.append(key)
           diff["vlan"][key].appen(f"+ {key}")
           if module_config["vrf_member"]:
-              cmd = f"vrf member {module_config["vrf_member"]}"
+              cmd = f"vrf member {module_config['vrf_member']}"
               commands.append(cmd)
               diff["vlan"][key].append(f"+ {cmd}")    
           commands.extend(["end", "save"]) 

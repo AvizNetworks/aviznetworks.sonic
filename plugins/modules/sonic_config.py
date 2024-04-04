@@ -155,15 +155,15 @@ options:
 """
 
 EXAMPLES = """
-- aviznetworks.sonic_fmcli.sonic_config:
+- aviznetworks.ansible.sonic_config:
     lines: ['username {{ user_name }} password {{ user_password }} role {{ user_role }}']
 
-- aviznetworks.sonic_fmcli.sonic_config:
+- aviznetworks.ansible.sonic_config:
     lines:
       - description 'SONiC'
     parents: ['interface Eth1/10']
 
-- aviznetworks.sonic_fmcli.sonic_config:
+- aviznetworks.ansible.sonic_config:
     lines:
       - seq 2 permit udp any any
       - seq 3 deny icmp any any
@@ -195,9 +195,9 @@ from ansible.module_utils.connection import ConnectionError
 
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.sonic import get_config, get_sublevel_config
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.sonic import edit_config, run_commands
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.utils.utils import command_list_str_to_dict
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.sonic import get_config, get_sublevel_config
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.sonic import edit_config, run_commands
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.utils import command_list_str_to_dict
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.config import NetworkConfig, dumps
 
 
