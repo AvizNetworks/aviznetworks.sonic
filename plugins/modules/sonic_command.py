@@ -23,7 +23,7 @@ description:
     argument that causes the module to wait for a specific condition
     before returning or time out if the condition is not met.
   - This module does not support running commands in configuration mode.
-    To configure SONiC devices, use M(aviznetworks.sonic_fmcli.sonic_config).
+    To configure SONiC devices, use M(aviznetworks.ansible.sonic_config).
 options:
   commands:
     description:
@@ -79,22 +79,22 @@ options:
 
 EXAMPLES = """
   - name: Runs show version on remote devices
-    aviznetworks.sonic_fmcli.sonic_command:
+    aviznetworks.ansible.sonic_command:
       commands: show version
 
   - name: Runs show version and checks to see if output contains 'Aviz'
-    aviznetworks.sonic_fmcli.sonic_command:
+    aviznetworks.ansible.sonic_command:
       commands: show version
       wait_for: result[0] contains Aviz
 
   - name: Runs multiple commands on remote nodes
-    aviznetworks.sonic_fmcli.sonic_command:
+    aviznetworks.ansible.sonic_command:
       commands:
         - show version
         - show interface
 
   - name: Runs multiple commands and evaluate the output
-    aviznetworks.sonic_fmcli.sonic_command:
+    aviznetworks.ansible.sonic_command:
       commands:
         - 'show version'
         - 'show system'
@@ -103,7 +103,7 @@ EXAMPLES = """
         - result[1] contains Hostname
 
   - name: Runs commands that require answering a prompt
-    aviznetworks.sonic_fmcli.sonic_command:
+    aviznetworks.ansible.sonic_command:
       commands:
         - command: 'reload'
           prompt: '[confirm yes/no]: ?$'
@@ -144,8 +144,8 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     EntityCollection,
     to_lines,
 )
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.sonic import run_commands
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.utils.utils import command_list_str_to_dict
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.sonic import run_commands
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.utils import command_list_str_to_dict
 
 
 def transform_commands_dict(module, commands_dict):

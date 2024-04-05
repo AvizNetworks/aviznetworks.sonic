@@ -24,7 +24,7 @@ from ansible.module_utils.common.network import (
     to_netmask,
 )
 from ansible.module_utils.common.validation import check_required_arguments
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.sonic import (
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.sonic import (
     to_request,
     edit_config
 )

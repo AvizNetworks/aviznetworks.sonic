@@ -1,6 +1,9 @@
 from __future__ import absolute_import, division, print_function
-import re, json
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.sonic import run_commands
+
+import json
+import re
+
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.sonic import run_commands
 
 
 class SonicConfig(object):
