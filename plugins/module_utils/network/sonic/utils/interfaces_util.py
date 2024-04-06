@@ -21,11 +21,11 @@ except Exception as e:
     ERR_MSG = to_native(e)
     LIB_IMP_ERR = traceback.format_exc()
 
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.sonic import (
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.sonic import (
     to_request,
     edit_config
 )
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.utils.utils import (
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.utils import (
     get_substring_starstwith_matched_item_list, 
     substring_starstwith_check)
 

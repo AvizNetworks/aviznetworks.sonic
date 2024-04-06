@@ -1,9 +1,9 @@
 from __future__ import absolute_import, division, print_function
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import SonicConfig
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.utils.utils import (
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import SonicConfig
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.utils import (
     get_substring_starstwith_matched_item_list,
     substring_starstwith_check)
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.utils.interfaces_util import (
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.interfaces_util import (
     config_mtu,
     config_description,
     config_ip_address,

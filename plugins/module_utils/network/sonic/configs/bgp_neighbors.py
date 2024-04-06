@@ -1,6 +1,6 @@
 
 from __future__ import absolute_import, division, print_function
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import SonicConfig
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import SonicConfig
 
 
 class BGPNeighborsConfig(object):
