@@ -1,0 +1,72 @@
+- name: "FMCLI Ports Configuration"
+  hosts: alldevices
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic_fmcli
+
+  tasks:
+    - name: "Sonic Mlag creation "
+      sonic_mlag:
+        config:
+          - domain_id: 1
+            peer_address: 192.168.0.2
+            peer_link: 999
+            src_address: 192.168.0.1
+            member_port_channel: ['200','201']
+            local_interface: 10
+                    
+    # - name: "Sonic Mlag creation "
+    #   sonic_mlag:
+    #     config:
+    #       - domain_id: 1
+    #         peer_address: 192.168.0.4
+    #         peer_link: 999
+    #         src_address: 192.168.0.0
+    #         member_port_channel: ['200','201']
+    #         local_interface: 10
+    #     state: delete
+
+    # - name: "Sonic Mlag deletion "
+    #   sonic_mlag:
+    #     config:
+    #       - domain_id: 1
+    #         # peer_address: 192.168.0.4
+    #         # peer_link: 999
+    #         # src_address: 192.168.0.0
+    #         # member_port_channel: ['200','201']
+    #         # local_interface: 10
+    #     state: delete
+    
+
+- name: "FMCLI Ports Configuration"
+  hosts: allLEAFS
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic_fmcli
+
+  tasks:
+    - name: "Sonic Mlag creation "
+      sonic_mlag:
+        config:
+          - domain_id: 1
+            peer_address: 192.168.0.2
+            peer_link: 999
+            src_address: 192.168.0.1
+            member_port_channel: ['200','201']
+            local_interface: 10
+    - name: "Sonic Mlag deletion "
+      sonic_mlag:
+        config:
+          - domain_id: 1
+            # peer_address: 192.168.0.4
+            # peer_link: 999
+            # src_address: 192.168.0.0
+            # member_port_channel: ['200','201']
+            # local_interface: 10
+        state: delete
+        
+
+  
+
