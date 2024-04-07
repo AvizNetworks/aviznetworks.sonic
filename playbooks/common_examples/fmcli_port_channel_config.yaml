@@ -54,7 +54,7 @@
           description: "pch description day2" 
           mode: "active" 
   
-  # - name: "day-1 remove member port from port-channel configuration"
+  # -name: "day-1 remove member port from port-channel configuration"
   #   sonic_port_channel:
   #     config:
   #       - pch_id: 10
