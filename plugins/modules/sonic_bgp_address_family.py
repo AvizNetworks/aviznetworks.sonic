@@ -18,10 +18,10 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     EntityCollection,
     to_lines,
 )
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.sonic import run_commands
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.utils.utils import command_list_str_to_dict
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.configs.bgp_address_family import BGPAddressFamilyConfig
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.argspecification.bgp_address_family import BGPAddressFamilyArgs
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.sonic import run_commands
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.utils import command_list_str_to_dict
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.configs.bgp_address_family import BGPAddressFamilyConfig
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.argspecification.bgp_address_family import BGPAddressFamilyArgs
 
 def transform_commands_dict(module, commands_dict):
     transform = EntityCollection(
@@ -59,11 +59,10 @@ def main():
 
     
     commands = list()
-    commands.extend(BGPAddressFamilyConfig().get_config_commands(module, get_current_config=True))
-    
-    # commands.extend(['end', 'save'])
-    # print(module.params['commands'])
+    commands, diff = BGPAddressFamilyConfig().get_config_commands(module, get_current_config=True)
     module.params['commands'] = commands
+    module.params['diff'] = diff  
+
 
     result = {'changed': False}
 

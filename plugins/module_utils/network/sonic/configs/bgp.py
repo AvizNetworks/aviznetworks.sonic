@@ -1,5 +1,5 @@
 from __future__ import absolute_import, division, print_function
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import SonicConfig
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import SonicConfig
 
 
 class BGPConfig(object):
@@ -39,7 +39,7 @@ class BGPConfig(object):
         commands = list()
         module_config = module.params['config']
         key_cmd = f"router bgp {module_config['bgp_asn']}"
-        current_cfg = self.running_bgp_conf.get(key_cmd,[])
+        current_cfg = self.running_bgp_conf.get(key_cmd, [])
         if module_config["bgp"]:
             for bgp in module_config["bgp"]:
                 commands.append('config terminal')
@@ -54,7 +54,8 @@ class BGPConfig(object):
                         commands.append(cmd)
                 if bgp['ebgp_requires_policy'] is False:
                     cmd = "no bgp ebgp-requires-policy"
-                    commands.append(cmd)  
+                    if cmd not in current_cfg:
+                        commands.append(cmd)  
                 if bgp['restart_time']:
                     cmd = f"bgp graceful-restart restart-time {bgp['restart_time']}"
                     if cmd not in current_cfg:
@@ -69,12 +70,13 @@ class BGPConfig(object):
 
 
     def get_config_commands(self, module, get_current_config=True):
-        
+        commands= list()
+        self.diff = {}
         if get_current_config:
             self.running_bgp_conf = SonicConfig().get_running_configs(module)["bgp"]
 
         if module.params['state'] in ["delete"]:
-            self.delete_config(module)
+            commands.extend(self.delete_config(module))
         else:
-            commands = self.config_bgp(module)      
-        return  commands
+            commands.extend(self.config_bgp(module))      
+        return commands, self.diff 

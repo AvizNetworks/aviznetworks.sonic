@@ -18,10 +18,10 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     EntityCollection,
     to_lines,
 )
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.sonic import run_commands
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.utils.utils import command_list_str_to_dict
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.configs.bgp import BGPConfig
-from ansible_collections.aviznetworks.sonic_fmcli.plugins.module_utils.network.sonic.argspecification.bgp import BGPArgs
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.sonic import run_commands
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.utils import command_list_str_to_dict
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.configs.bgp import BGPConfig
+from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.argspecification.bgp import BGPArgs
 
 
 def transform_commands_dict(module, commands_dict):
@@ -60,11 +60,9 @@ def main():
 
     
     commands = list()
-    commands.extend(BGPConfig().get_config_commands(module, get_current_config=True))
-    
-    # commands.extend(['end', 'save'])
-    # print(module.params['commands'])
+    commands, diff = BGPConfig().get_config_commands(module, get_current_config=True)
     module.params['commands'] = commands
+    module.params['diff'] = diff
 
     result = {'changed': False}
 
