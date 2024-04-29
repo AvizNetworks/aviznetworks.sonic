@@ -1,86 +1,219 @@
 from __future__ import absolute_import, division, print_function
-from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import SonicConfig
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import SonicConfig
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.utils import (
+    get_substring_starstwith_matched_item_list,
+    substring_starstwith_check,
+    get_list_substring_starstwith_matched_item_list)
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.interfaces_util import (
+    config_mtu,
+    config_description,
+    config_ip_address,
+    config_speed,
+    config_channel_group,
+    get_portchannel_member_interfaces)
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.vlan_util import (
+    config_vlans,
+    get_vlan_ids
+    )
 
 
 class VlanConfig(object):
+    
     def __init__(self) -> None:
         pass
 
-    def configvlan(self, commands, vlanid):
-        for id in vlanid:
-            commands.append(f"vlan {id}")
-            commands.append(f"exit")
-        return commands
     
-    def configipaddress(self, commands, vlanid, ipaddress):
-        commands.append(f"interface vlan {vlanid[0]}")
-        commands.append(f"ip address {ipaddress}")
-        commands.append(f"exit")
-        return commands
-    
-    def unconfigipaddress(self, commands, vlanid, ipaddress):
-        commands.append(f"no interface vlan {vlanid[0]}")
-        return commands
-    
-    def unconfigvlan(self, commands, vlanid):
-        for id in vlanid:
-            commands.append(f"no vlan {id}")
-        return commands
+    def vlans_merge_config(self, module):
+        commands = []
+        module_config_list = module.params['config'] 
 
-
-    def configaccesstrunk(self, commands, vlanmode, interface, vlanid):
-        if vlanmode:
-            for intf in interface:
-                commands.append(f"interface ethernet {intf}")
-                commands.append(f"switchport mode {vlanmode}")
-                for id in vlanid:
-                    if vlanmode.lower() == "access":
-                        commands.append(f"switchport access vlan {id}")
+        for module_config in module_config_list:
+            
+            # self.diff["vlan"][key] = []
+            vlan_cmds, self.diff = config_vlans(module_config, config_list=self.running_conf, diff=self.diff)
+            commands.extend(vlan_cmds)
+            
+            
+            for pch in module_config.get("pch_id"):
+                configured_pch_interfaces = get_portchannel_member_interfaces(self.running_interface_conf, pch)
+                for inf in configured_pch_interfaces:
+                    flag = True
+                    key_inf = f"interface ethernet {inf}"
+                    config_list_inf = self.running_interface_conf.get(key_inf, [])
+                    trunk_lst = get_list_substring_starstwith_matched_item_list("switchport trunk allowed", config_list_inf)
+                    access_conf = get_substring_starstwith_matched_item_list("switchport access vlan", config_list_inf)
+                    commands.append(f"config terminal")
+                    commands.append(key_inf)
+                    self.diff["interfaces"][key_inf] = []
+                    if trunk_lst:
+                        flag = False
+                        for t_l in trunk_lst:
+                            commands.append(f"no {t_l}")
+                            self.diff["interfaces"][key_inf].append(f"- {t_l}")
+                        commands.append(f"no switchport mode trunk")
+                        self.diff["interfaces"][key_inf].append(f"- switchport mode trunk")
+                    elif access_conf:
+                        flag = False
+                        commands.append(f"no {access_conf}")
+                        self.diff["interfaces"][key_inf].append(f"- {access_conf}")
+                    if flag:
+                        commands = commands[:-2]
                     else:
-                        commands.append(f"switchport trunk allowed vlan add {id}")
-                commands.append(f"exit") 
-            return commands 
+                        commands.extend(["end", "save"])
 
-    def unconfigaccesstrunk(self, commands, interface, vlanid, vlanmode, switchport):
-        for intf in interface:
-            commands.append(f"interface ethernet {intf}")   
-            if vlanmode.lower() == "access":
-                commands.append(f"no switchport access vlan {vlanid[0]}")
-            else:
-                for portid in vlanid:  
-                    commands.append(f"no switchport trunk allowed vlan add {portid}")
-                if switchport:
-                    commands.append(f"no switchport mode {vlanmode}")
-            commands.append(f"exit")
+                key = f"interface port-channel {pch}"    
+                self.diff["interfaces"][key] = []
+                init_config_cmds = ['config terminal', key]
+                commands.extend(init_config_cmds)
+                config_list_pch = self.running_interface_conf.get(key, [])
+                access_conf = get_substring_starstwith_matched_item_list("switchport access vlan", config_list_pch)
+                trunk_conf = get_substring_starstwith_matched_item_list("switchport mode trunk", config_list_pch)
+                if module_config.get('vlan_mode') == "trunk":
+                    if access_conf:
+                        commands.append(f"no {access_conf}")
+                        self.diff["interfaces"][key].append(f"- {access_conf}")
+                    commands.append(f"switchport mode trunk")
+                    self.diff["interfaces"][key].append(f"+ switchport mode trunk")
+                    for vl in get_vlan_ids(module_config):
+                        cmd = f"switchport trunk allowed vlan add {vl}"
+                        if cmd not in config_list_pch:
+                            self.diff["interfaces"][key].append(f"+ {cmd}")
+                            commands.append(f"switchport trunk allowed vlan add {vl}")
+                else:
+                    cmd = f"switchport access vlan {get_vlan_ids(module_config)[0]}"
+                    if trunk_conf:
+                        trunk_lst = get_list_substring_starstwith_matched_item_list("switchport trunk allowed", config_list_pch)
+                        for t_l in trunk_lst:
+                            commands.append(f"no {t_l}")
+                            self.diff["interfaces"][key].append(f"- {t_l}")
+                        commands.append(f"no switchport mode trunk")
+                        self.diff["interfaces"][key].append(f"- switchport mode trunk")
+                    elif access_conf and cmd != access_conf:
+                        commands.append(f"no {access_conf}")
+                        self.diff["interfaces"][key].append(f"- {access_conf}")
+                    if cmd not in config_list_pch:
+                        commands.append(f"switchport mode access")
+                        commands.append(cmd)
+                        self.diff["interfaces"][key].append(f"+ switchport mode access")
+                        self.diff["interfaces"][key].append(f"+ {cmd}")
+                commands.extend(["end", "save"])
+            
+            
+            
+            for eth in module_config.get("interfaces", []):
+                configured_pch_interfaces = []
+                for pch in module_config.get("pch_id"): 
+                    configured_pch_interfaces.extend(get_portchannel_member_interfaces(self.running_interface_conf, pch))
+                
+                if eth not in configured_pch_interfaces:
+                    key = f"interface ethernet {eth}"    
+                    self.diff["interfaces"][key] = []
+                    init_config_cmds = ['config terminal', key]
+                    commands.extend(init_config_cmds)
+                    config_list_pch = self.running_interface_conf.get(key, [])
+                    access_conf = get_substring_starstwith_matched_item_list("switchport access vlan", config_list_pch)
+                    trunk_conf = get_substring_starstwith_matched_item_list("switchport mode trunk", config_list_pch)
+                    if module_config.get('vlan_mode') == "trunk":
+                        if access_conf:
+                            commands.append(f"no {access_conf}")
+                            self.diff["interfaces"][key].append(f"- {access_conf}")
+                        commands.append(f"switchport mode trunk")
+                        self.diff["interfaces"][key].append(f"+ switchport mode trunk")
+                        for vl in get_vlan_ids(module_config):
+                            cmd = f"switchport trunk allowed vlan add {vl}"
+                            if cmd not in config_list_pch:
+                                self.diff["interfaces"][key].append(f"+ {cmd}")
+                                commands.append(f"switchport trunk allowed vlan add {vl}")
+                    else:
+                        cmd = f"switchport access vlan {get_vlan_ids(module_config)[0]}"
+                        if trunk_conf:
+                            trunk_lst = get_list_substring_starstwith_matched_item_list("switchport trunk allowed", config_list_pch)
+                            for t_l in trunk_lst:
+                                commands.append(f"no {t_l}")
+                                self.diff["interfaces"][key].append(f"- {t_l}")
+                            commands.append(f"no switchport mode trunk")
+                            self.diff["interfaces"][key].append(f"- switchport mode trunk")
+                        elif access_conf and cmd != access_conf:
+                            commands.append(f"no {access_conf}")
+                            self.diff["interfaces"][key].append(f"- {access_conf}")
+                        if cmd not in config_list_pch:
+                            commands.append(f"switchport mode access")
+                            commands.append(cmd)
+                            self.diff["interfaces"][key].append(f"+ switchport mode access")
+                            self.diff["interfaces"][key].append(f"+ {cmd}")    
+                    commands.extend(["end", "save"])
+
+        return commands, self.diff
+    
+    
+
+    def delete_vlan_config(self, module):
+        commands = []
+        module_config_list = module.params['config']
+
+        #delete_configs = ['vlan_id', 'pch_id', 'interfaces']
+        for module_config in module_config_list:
+            
+            for interface in module_config['interfaces']:
+                flag_intf = None
+                inf_key = f"interface ethernet {interface}"
+                self.diff["interfaces"][inf_key] = []
+                init_config_cmds = ['config terminal', inf_key]
+                commands.extend(init_config_cmds)
+                cmd = f"channel-group {module_config['pch_id']} mode active"
+                intf_config_list = self.running_interface_conf.get(inf_key, []) 
+                if inf_key in self.running_interface_conf and cmd in intf_config_list:
+                    flag_intf = False
+                    commands.append(f"no {cmd}")
+                    self.diff['interfaces'][inf_key].append(f"- {cmd}")
+                
+                    if module_config['mtu']:
+                        cmd = f"mtu {module_config['mtu']}"
+                        if cmd in intf_config_list:
+                            commands.append(f"no {cmd}")
+                            self.diff['interfaces'][inf_key].append(f"- {cmd}")
+                            
+                    if module_config['speed']:
+                        cmd = f"speed {module_config['speed']}"
+                        if cmd in intf_config_list:
+                            commands.append(f"no {cmd}")
+                            self.diff['interfaces'][inf_key].append(f"- {cmd}")
+
+                if flag_intf or (flag_intf is None):
+                    commands = commands[:-2]
+                else:
+                    commands.extend(['end', 'save'])
+
+            # flag_pch = False
+            key_pch = f"interface port-channel {module_config['pch_id']}"  
+            self.diff["interfaces"][key_pch] = []
+            if key_pch in self.running_interface_conf:
+                commands.append(f"config terminal")
+                commands.append(f"no {key_pch}")
+                commands.extend(['end', 'save'])
         return commands
-
+    
+            
     def get_config_commands(self, module, get_current_config=True):
+        commands = list()
+        self.diff = {"interfaces": {}, "vlan": {}}
+        # self.diff = {"vlan": {}}
+        # module.params['config']
+
+        if get_current_config:
+            
+            self.running_conf = SonicConfig().get_running_configs(module)
+            self.running_interface_conf = self.running_conf['interfaces']
+        
+            
+        if module.params['state'] in ["delete"]:
+            commands.extend(self.delete_pch(module))
+
+        else:
+            commands, self.diff = self.vlans_merge_config(module)
         
         # if get_current_config:
-        #     running_config_json = SonicConfig().get_running_configs(module)
-            
+        #     SonicConfig().get_running_configs(module)
 
-        commands = list()
-        module_config_list = module.params['config']
-        init_config_cmds = ['config terminal']
-        commands.extend(init_config_cmds)
-
-        if module.params['state'] in ["delete"]:
-            for module_config in module_config_list:
-                if not module_config['interface'] and module_config['vlan_id']:
-                    self.unconfigvlan(commands, module_config['vlan_id'])
-                if module_config['vlan_mode'] and module_config['interface'] and module_config['vlan_id']:
-                    self.unconfigaccesstrunk(commands, module_config['interface'], module_config['vlan_id'],
-                                             module_config['vlan_mode'], module_config['enableswitchport'])
-                if module_config['ipaddress'] and module_config['vlan_id']:
-                    self.unconfigipaddress(commands, module_config['vlan_id'], module_config['ipaddress'])   
-        else: 
-            for module_config in module_config_list:
-                if not module_config['interface'] and module_config['vlan_id']:
-                    self.configvlan(commands, module_config['vlan_id'])
-                if module_config['vlan_mode'] and module_config['interface'] and module_config['vlan_id']:
-                    self.configaccesstrunk(commands, module_config['vlan_mode'], module_config['interface'], 
-                                           module_config['vlan_id']) 
-                if module_config['ipaddress'] and module_config['vlan_id']:
-                    self.configipaddress(commands, module_config['vlan_id'], module_config['ipaddress'])   
-        return  commands
+        return commands, self.diff
+        

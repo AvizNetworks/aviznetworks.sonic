@@ -143,10 +143,10 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     EntityCollection,
     to_lines,
 )
-from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.sonic import run_commands
-from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.utils import command_list_str_to_dict
-from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.configs.vlan import VlanConfig
-from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.argspecification.vlan import VlanArgs
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.sonic import run_commands
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.utils import command_list_str_to_dict
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.configs.vlan import VlanConfig
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.argspecification.vlan import VlanArgs
 
 def transform_commands_dict(module, commands_dict):
     transform = EntityCollection(
@@ -184,11 +184,13 @@ def main():
 
     
     commands = list()
-    commands.extend(VlanConfig().get_config_commands(module, get_current_config=True))
-    
-    commands.extend(['end', 'save'])
-    print(module.params['commands'])
+    commands, diff = VlanConfig().get_config_commands(module, get_current_config=True)
+
     module.params['commands'] = commands
+    module.params['diff'] = diff
+    
+    # commands.extend(['end', 'save'])
+    # print(module.params['commands'])
 
     result = {'changed': False}
 

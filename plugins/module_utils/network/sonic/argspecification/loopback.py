@@ -14,7 +14,7 @@ class LoopbackArgs(object):
             "elements": "dict",
             "options": {
                 "ip_address": {"type": "str"}, # 10.4.4.4/24
-                "loopback": {"type": "int", "required": True}
+                "loopback_id": {"type": "int", "required": True}
             },
             "type": "list"
         },

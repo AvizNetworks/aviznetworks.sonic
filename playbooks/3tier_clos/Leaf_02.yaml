@@ -1,0 +1,93 @@
+---
+- name: "FMCLI Ports Configuration "
+  hosts: leaf02
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic
+  
+  tasks:
+    # - debug: msg="ansible_host value for {{ inventory_hostname }} is {{ ansible_host }}"
+    - name: SONiC port configuration with wait_for and match=any
+      sonic_interfaces:
+        config:
+          - interface: "Ethernet64"
+            ip_address: 40.0.0.11/31
+            mtu: 9000
+            enable: true
+            description: "connected to spine2"
+          - interface: "Ethernet96"
+            ip_address: 40.0.0.3/31
+            mtu: 9000
+            enable: true
+            description: "connected to spine1"
+          - interface: "Ethernet248"
+            mtu: 9000
+            enable: true
+            description: "connected to ixia"
+
+
+    - name: SONiC loopback configuration merge
+      sonic_loopback:
+        config:
+          - loopback: 1
+            ip_address: 10.10.10.4/32
+
+    - name: configure vlans
+      sonic_vlan:
+        config: 
+          - vlan_ids: ['201']
+          
+    - name: Configure trunk port on the physical interface
+      sonic_vlan: 
+        config:
+          - vlan_ids: ['201']
+            interfaces: ['Ethernet248'] 
+            vlan_mode: 'access'
+
+    - name: configure ipaddress on vlans
+      sonic_svi:
+        config: 
+          - vlan_id: 201
+            ip_address: 100.10.0.129/25
+
+    - name: Sonic router map config
+      sonic_bgp_route_maps:
+        config:
+          - map_name: "RM_SET_SRC"
+            action: permit
+            sequence_num: 10    
+            set:
+              ip: 10.10.10.4   
+
+    - name: Sonic router BGP config
+      sonic_bgp_neighbor:
+        config:
+          - bgp_asn: 1001
+            neighbor:
+              ipv4:
+                ip: ['40.0.0.2','40.0.0.10']
+                remote_as: 1001
+                extended_nexthop: true
+
+    - name: Sonic router BGP config
+      sonic_bgp:
+        config:
+          bgp_asn: 1001
+          bgp:
+            - router_id: 10.10.10.4
+              ebgp_requires_policy: false
+              bestpath: true 
+   
+    - name: Sonic router BGP config
+      sonic_bgp_address_family:
+        config:
+          - bgp_asn: 1001
+            address_family: # address-family
+              ipv4:  #address-family ipv4 unicast
+                neighbor:
+                  ip: ['40.0.0.2','40.0.0.10']
+                  allowas_in: 1 # 1 to 10 or origin
+                network: ['40.0.0.2/31','40.0.0.10/31']
+                redistribute: ["connected",'static']
+

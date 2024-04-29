@@ -1,10 +1,10 @@
 from __future__ import absolute_import, division, print_function
-from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import \
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import \
     SonicConfig
-from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.utils import (
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.utils import (
     get_substring_starstwith_matched_item_list,
     substring_starstwith_check)
-from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.interfaces_util import config_ip_address
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.interfaces_util import config_ip_address
 
 
 class LoopbackConfig(object):
@@ -16,18 +16,18 @@ class LoopbackConfig(object):
         commands = []
 
         module_config_list = module.params['config']
-        delete_configs = ['loopback', 'ip_address']
+        delete_configs = ['loopback_id', 'ip_address']
         for module_config in module_config_list:
             filtered_module_config = {key: value for key, value in module_config.items() if
                                       value is not None and value not in ('', [])}
             delete_loopback = [item for item in list(filtered_module_config.keys()) if item in delete_configs]
 
-            key = f"interface loopback {module_config['loopback']}"
+            key = f"interface loopback {module_config['loopback_id']}"
             self.diff["interfaces"][key] = []
             if key in self.running_config:
                 commands.append(f"config terminal")
                 if len(delete_loopback) == 1:
-                    commands.append(f"no interface loopback {module_config['loopback']}")
+                    commands.append(f"no interface loopback {module_config['loopback_id']}")
                     self.diff["interfaces"][key].append(f"- {key}")
                 else:
                     config_list = self.running_config[key]
@@ -46,7 +46,7 @@ class LoopbackConfig(object):
         commands = []
         module_config_list = module.params['config']
         for module_config in module_config_list:
-            key = f"interface loopback {module_config['loopback']}"
+            key = f"interface loopback {module_config['loopback_id']}"
             self.diff["interfaces"][key] = []
             if key in self.running_config:
                 config_list = self.running_config.get(key, [])
@@ -70,7 +70,7 @@ class LoopbackConfig(object):
         commands = []
         module_config_list = module.params['config']
         for module_config in module_config_list:
-            key = f"interface loopback {module_config['loopback']}"
+            key = f"interface loopback {module_config['loopback_id']}"
             self.diff["interfaces"][key] = []
             init_config_cmds = ['config terminal', key]
             commands.extend(init_config_cmds)

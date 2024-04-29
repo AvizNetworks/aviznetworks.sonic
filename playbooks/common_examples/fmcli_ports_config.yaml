@@ -5,13 +5,13 @@
   gather_facts: no
   connection: network_cli
   collections:
-    - aviznetworks.sonic_fmcli
+    - aviznetworks.sonic
   
   tasks:
 
   - name: SONiC port configuration with wait_for and match=any
     sonic_ports:                               # oper 0
-      interface: "Ethernet34","Ethernet36"'                  # oper 1
+      interface: ["Ethernet34", "Ethernet36"]  # oper 1
       mtu: 9000                                # oper 2
       enable: true                             # oper 3
       description: "fmcli description_eth32"   # oper 4

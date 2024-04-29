@@ -24,7 +24,7 @@ from ansible.module_utils.common.network import (
     to_netmask,
 )
 from ansible.module_utils.common.validation import check_required_arguments
-from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.sonic import (
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.sonic import (
     to_request,
     edit_config
 )
@@ -52,14 +52,28 @@ def substring_starstwith_check(substring, string_list):
     return found
     
 def get_substring_matched_item_list(substring, string_list):
+    st = ""
     for string in string_list:
         if substring in string:
-            return string
+            st = string
+    return st
 
 def get_substring_starstwith_matched_item_list(substring, string_list):
+    st = ""
     for string in string_list:
         if string.startswith(substring):
-            return string
+            st = string
+            break
+    return st
+
+def get_list_substring_starstwith_matched_item_list(substring, string_list):
+    match_str_list = []
+    for string in string_list:
+        if string.startswith(substring):
+            match_str_list.append(string)
+    return match_str_list
+
+
 
 def remove_matching_defaults(root, default_entry):
     if isinstance(root, list):

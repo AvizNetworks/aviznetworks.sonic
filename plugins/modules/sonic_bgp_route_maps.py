@@ -20,8 +20,9 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 )
 from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.sonic import run_commands
 from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.utils import command_list_str_to_dict
-from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.configs.bgp_neighbors import BGPNeighborsConfig
-from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.argspecification.bgp_neighbors import BGPNeighborsArgs
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.configs.route_maps import BGPProtocolConfig
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.argspecification.route_maps import BGPProtocolArgs
+
 
 def transform_commands_dict(module, commands_dict):
     transform = EntityCollection(
@@ -49,7 +50,7 @@ def parse_commands(module, warnings):
 def main():
     """main entry point for module execution
     """
-    module = AnsibleModule(argument_spec=BGPNeighborsArgs.argument_spec, supports_check_mode=True)
+    module = AnsibleModule(argument_spec=BGPProtocolArgs.argument_spec, supports_check_mode=True)
     
     # ansible_host = list(module.params.keys())
     # with open("fmcli_hosts_data.txt", "w") as f:
@@ -59,9 +60,11 @@ def main():
 
     
     commands = list()
-    commands, diff = BGPNeighborsConfig().get_config_commands(module, get_current_config=True)
+    commands, diff = BGPProtocolConfig().get_config_commands(module, get_current_config=True)
     module.params['commands'] = commands
     module.params['diff'] = diff
+    
+    module.params['commands'] = commands
 
     result = {'changed': False}
 

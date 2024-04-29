@@ -21,11 +21,11 @@ except Exception as e:
     ERR_MSG = to_native(e)
     LIB_IMP_ERR = traceback.format_exc()
 
-from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.sonic import (
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.sonic import (
     to_request,
     edit_config
 )
-from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.utils import (
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.utils import (
     get_substring_starstwith_matched_item_list, 
     substring_starstwith_check)
 
@@ -69,7 +69,7 @@ def config_ip_address(module_config, config_list, diff={}, key=""):
         pass
     elif substring_starstwith_check("ip address", config_list):
         cmd_dlt = get_substring_starstwith_matched_item_list("ip address", config_list)
-        commands.append(f"no {cmd}")
+        commands.append(f"no {cmd_dlt}")
         commands.append(cmd)
         diff["interfaces"][key].append(f"- {cmd_dlt}")
         diff["interfaces"][key].append(f"+ {cmd}")
@@ -164,6 +164,19 @@ def config_channel_group(module_config, config_list, diff={}, key=""):
             commands.append(f"no {cmd_dlt}")
             diff["interfaces"][key].append(f"- {cmd_dlt}")
     return commands , diff
+
+def get_portchannel_member_interfaces(running_interface_config, pch_id):
+    # running_interface_config = running_config["interface"]
+    
+    interfaces = []
+    intf_keys = list(running_interface_config.keys())
+    for intf in intf_keys:
+        config_list = running_interface_config.get(intf)
+        interface_cg = get_substring_starstwith_matched_item_list("channel-group", config_list)
+        if f" {str(pch_id)} " in interface_cg:
+            interfaces.append(intf.split()[-1])
+    return interfaces
+
 
 # To create Loopback, VLAN interfaces
 def build_interfaces_create_request(interface_name):

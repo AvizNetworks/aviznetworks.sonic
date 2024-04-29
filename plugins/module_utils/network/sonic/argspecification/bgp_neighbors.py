@@ -12,36 +12,111 @@ class BGPNeighborsArgs(object):
 
     argument_spec = {
         "config": {
+            "elements": "dict",
             "options": {
                 "bgp_asn": {"required": True, "type": "str"},
                 "neighbor": {
-                    "elements": "dict",
                     "options": {
-                        "ip": {"required": True, "type": "str"},
-                        "remote_as": {"type": "str"},
-                        "extended_nexthop": {"type": "bool", "default": None},
-                        "peer_group_name": {"type": "str"},
-                        "bfd": {"type": "str"},
-                        "shoutdown": {"type": "bool", "default": None},
-                        "timers": {
+                        "interface": { # implemetion in progress
                             "options": {
-                                "holdtime": {"type": "int"},
-                                "keepalive": {"type": "int"}
+                                "interface": {"type": "str"}, 
+                                "description": {"type": "str"},
+                                "peer_group_name": {"type": "str"},
+                                "remote_as": {
+                                    "options": {
+                                        "as_number" :{"type": "int"},
+                                        "external" :{"type": "bool", "default": None},
+                                        "internal" :{"type": "bool", "default": None},
+                                    },
+                                    "required_one_of": [["as_number", "external", "internal"]],
+                                    "type": "dict"
+                                },
+                                "shutdown": {"type": "bool", "default": None},
                             },
                             "type": "dict"
                         },
-                        "update_source": {
+                        "ipv4": {
                             "options": {
-                                "interface": {"type": "str"},
-                                "portchannel": {"type": "str"}
+                                "ip": {"type": "list", "default": []},
+                                "remote_as": {"type": "str","default": ""},
+                                "extended_nexthop": {"type": "bool", "default": False},
+                                "description": {"type": "str"}, # implemetion in progress
+                                "peer_group_name": {"type": "str"}, # implemetion in progress
+                                "bfd": {"type": "str"}, # implemetion in progress
+                                "shoutdown": {"type": "bool", "default": False}, # implemetion in progress
+                                "timers": { # implemetion in progress
+                                    "options": {
+                                        "keepalive": {"type": "int"}
+                                    },
+                                    "type": "dict"
+                                },
+                                "update_source": { # implemetion in progress
+                                    "options": {
+                                        "interface": {"type": "str"},
+                                        "portchannel": {"type": "str"}
+                                    },
+                                    "required_one_of": [["interface", "portchannel"]],
+                                    "type": "dict"
+                                }                                   
                             },
                             "type": "dict"
-                        }
+                        },
+                        "ipv6":{ # implemetion in progress
+                            "options": {
+                                "ip": {"type": "list"},
+                                "remote_as": {"type": "str"},
+                                "extended_nexthop": {"type": "bool", "default": None},
+                                "description": {"type": "str"}, # implemetion in progress
+                                "peer_group_name": {"type": "str"}, # implemetion in progress
+                                "bfd": {"type": "str"}, # implemetion in progress
+                                "shoutdown": {"type": "bool", "default": None}, # implemetion in progress
+                                "timers": { # implemetion in progress
+                                    "options": {
+                                        "keepalive": {"type": "int"}
+                                    },
+                                    "type": "dict"
+                                },
+                                "update_source": { # implemetion in progress
+                                    "options": {
+                                        "interface": {"type": "str"},
+                                        "portchannel": {"type": "str"}
+                                    },
+                                    "required_one_of": [["interface", "portchannel"]],
+                                    "type": "dict"
+                                }                                   
+                            },
+                            "type": "dict"
+                        },
+                        "Peer_group_Name":{ # implemetion in progress
+                            "options": {
+                                "peer_group_name": {"type": "str"},
+                                "extended_nexthop": {"type": "bool", "default": None}, 
+                                "description": {"type": "str"},
+                                "peer_group": {"type": "bool", "default": None},
+                                "remote_as": {
+                                    "options": {
+                                        "as_number" :{"type": "int"},
+                                        "external" :{"type": "bool", "default": None},
+                                        "internal" :{"type": "bool", "default": None},
+                                    },
+                                    "required_one_of": [["as_number", "external", "internal"]],
+                                    "type": "dict"
+                                },
+                                "shutdown": {"type": "bool", "default": None},
+                                "timers": {
+                                    "options": {
+                                        "keepalive": {"type": "int"}
+                                    },
+                                    "type": "dict"
+                                }
+                            },
+                            "type": "dict"
+                        },
                     },
-                    "type": "list"
-                }
+                    "type": "dict"
+                },
             },
-            "type": "dict"
+            "type": "list"
         },
         "state": {
             "choices": ["merged", "deleted"],
@@ -51,46 +126,9 @@ class BGPNeighborsArgs(object):
         "match": {"default": "all", "choices":["all", "any"]},
         "retries": {"default": 10, "type": "int"},
         "interval": {"default": 3, "type": "int"},
-        "commands": {"elements": "str" , "type": "list"}
+        "commands": {"elements": "str" , "type": "list"},
+        "diff": {"elements": "str" , "type": "list"}
     }
 
 
-    # argument_spec = {
-    #     "config": {
-    #         "elements": "dict",
-    #         "options": {
-    #             "bgp_asn": {"required": True, "type": "str"},
-    #             "neighbor": {
-    #                 "elements": "dict",
-    #                 "options": {
-    #                     "ip": {"required": True, "type": "str"},
-    #                     "remote_as": {"type": "str"},
-    #                     "extended_nexthop": {"type": "bool", "default": None},
-    #                     "peer_group_name": {"type": "str"},
-    #                     "bfd": {"type": "str"},
-    #                     "shoutdown": {"type": "bool", "default": None},
-    #                     "timers": {
-    #                         "options": {
-    #                             "holdtime": {"type": "int"},
-    #                             "keepalive": {"type": "int"}
-    #                         },
-    #                         "type": "dict"
-    #                     },
-    #                     "update_source": {
-    #                         "options": {
-    #                             "interface": {"type": "str"},
-    #                             "portchannel": {"type": "str"}
-    #                         },
-    #                         "type": "dict"
-    #                     }
-    #                 },
-    #                 "type": "list"
-    #             }
-    #         },
-    #         "type": "list"
-    #     },
-    #     "state": {
-    #         "choices": ["merged", "deleted"],
-    #         "default": "merged"
-    #     }
-    # }
+  
