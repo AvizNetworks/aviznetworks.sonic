@@ -24,7 +24,7 @@ class BGPAddressFamilyArgs(object):
                                     "options": {
                                         # "neighbor_address": {
                                         #     "options": {
-                                        "ip": {"type": "list", "default": []},
+                                        "ips": {"type": "list", "default": []},
                                         "activate": {"type": "bool", "default": None},                                               
                                         "allowas_in": {"type": "int", "default": None},
                                         "filter_list": {
@@ -33,7 +33,7 @@ class BGPAddressFamilyArgs(object):
                                                 'choices': ['in', 'out'],     
                                             },
                                             "type": "dict"
-                                        } ,
+                                        },
                                         "route_map": {
                                             "options":{
                                                 "route_map_name": {"type": "str"}, 

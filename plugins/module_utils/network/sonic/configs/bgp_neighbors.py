@@ -22,7 +22,7 @@ class BGPNeighborsConfig(object):
             ipv4_config = module_config["neighbor"].get('ipv4')
             remote_as = ipv4_config.get("remote_as")  
             extended_nexthop = ipv4_config.get("extended_nexthop")
-            for item in ipv4_config["ip"]:
+            for item in ipv4_config["ips"]:
                 if remote_as:               
                     cmd = f"neighbor {item} remote-as {remote_as}"
                     if cmd not in current_cfg:

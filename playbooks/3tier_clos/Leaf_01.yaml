@@ -67,7 +67,7 @@
           - bgp_asn: 1001
             neighbor:
               ipv4:
-                ip: ['40.0.0.0','40.0.0.8']
+                ips: ['40.0.0.0','40.0.0.8']
                 remote_as: 1001
                 extended_nexthop: true
 
@@ -87,7 +87,7 @@
             address_family: # address-family
               ipv4:  #address-family ipv4 unicast
                 neighbor:
-                  ip: ['40.0.0.0','40.0.0.8']
+                  ips: ['40.0.0.0','40.0.0.8']
                   allowas_in: 1 # 1 to 10 or origin
                 network: ['40.0.0.0/31','40.0.0.8/31']
                 redistribute: ["connected",'static']

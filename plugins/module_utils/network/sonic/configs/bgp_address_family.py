@@ -24,11 +24,11 @@ class BGPAddressFamilyConfig(object):
             next_hop_self = neighbor_config.get("next_hop_self")
             network_config = address_family_ipv4_config.get("network")
             redistribute_config = address_family_ipv4_config.get("redistribute")
-            if neighbor_config["ip"] or network_config or redistribute_config:
+            if neighbor_config["ips"] or network_config or redistribute_config:
                 key_cmd = ('address-family ipv4 unicast')
                 commands.append(key_cmd)
                 current_cfg = bgp_cfg.get(key_cmd, [])
-                for item in neighbor_config["ip"]:
+                for item in neighbor_config["ips"]:
                     if allowas_in:               
                         cmd = f"neighbor {item} allowas-in {allowas_in}"
                         if cmd not in current_cfg:

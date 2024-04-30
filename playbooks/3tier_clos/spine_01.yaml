@@ -43,7 +43,7 @@
           - bgp_asn: 1001
             neighbor:
               ipv4:
-                ip: ['40.0.0.1','40.0.0.3']
+                ips: ['40.0.0.1','40.0.0.3']
                 remote_as: 1001
                 extended_nexthop: true
 
@@ -63,7 +63,7 @@
             address_family: # address-family
               ipv4:  #address-family ipv4 unicast
                 neighbor:
-                  ip: ['40.0.0.1','40.0.0.3']
+                  ips: ['40.0.0.1','40.0.0.3']
                   allowas_in: 1 # 1 to 10 or origin
                   route_reflector_client: true
                   next_hop_self: true

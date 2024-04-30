@@ -3,6 +3,7 @@ The arg spec for the sonic_bgp_neighbors module
 """
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 
@@ -22,9 +23,9 @@ class BGPProtocolArgs(object):
                 'sequence_num': {
                     'type': 'int'
                 },
-                'on_match': {'type': 'bool'}, # implemetion in progress 
-                'description': {'type': 'str'}, # implemetion in progress 
-                'match': { # implemetion in progress 
+                'on_match': {'type': 'bool'},  # implemetion in progress
+                'description': {'type': 'str'},  # implemetion in progress
+                'match': {  # implemetion in progress
                     'options': {
                         'access_path_list_name': {'type': 'str'},
                         'community': {
@@ -57,14 +58,14 @@ class BGPProtocolArgs(object):
                 },
                 'set': {
                     'options': {
-                        'ip' : {'type': 'str'},
-                        'ipv6_next_hop': { # implemetion in progress 
+                        'ip': {'type': 'str'},
+                        'ipv6_next_hop': {  # implemetion in progress
                             'options': {
                                 'prefer_global': {'type': 'bool'}
                             },
                             'type': 'dict'
                         },
-                        'origin' : { # implemetion in progress 
+                        'origin': {  # implemetion in progress
                             'options': {
                                 'egp': {'type': 'bool'},
                                 'igp': {'type': 'bool'},
@@ -72,7 +73,7 @@ class BGPProtocolArgs(object):
                             },
                             'type': 'dict'
                         },
-                        'community': { # implemetion in progress 
+                        'community': {  # implemetion in progress
                             'options': {
                                 'community_number': {
                                     'elements': 'str',
@@ -110,11 +111,9 @@ class BGPProtocolArgs(object):
             "choices": ["merged", "deleted"],
             "default": "merged"
         },
-        "wait_for": {"elements": "str" , "type": "list"},
-        "match": {"default": "all", "choices":["all", "any"]},
+        "wait_for": {"elements": "str", "type": "list"},
+        "match": {"default": "all", "choices": ["all", "any"]},
         "retries": {"default": 10, "type": "int"},
         "interval": {"default": 3, "type": "int"},
-        "commands": {"elements": "str" , "type": "list"}
+        "commands": {"elements": "str", "type": "list"}
     }  # pylint: disable=C0301
-
-  
