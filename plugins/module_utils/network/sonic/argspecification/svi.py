@@ -14,7 +14,7 @@ class SVIArgs(object):
             "elements": "dict",
             "options": {
                 "ip_address": {"type": "str"}, # 10.4.4.4/24
-                "vlan_id": {"type": "int", "required": True}
+                "vlan_id": {"type": "str", "required": True}
                 # "vlan_range": {"type": "int", "required": True}
             },
             "type": "list"

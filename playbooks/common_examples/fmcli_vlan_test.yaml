@@ -1,0 +1,126 @@
+---
+- name: "FMCLI Ports Configuration "
+  hosts: leaf01
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic
+  
+  tasks:
+
+    - name: "day-1 Add member port to port-channel configuration"
+      sonic_port_channel:
+        config:
+          - pch_id: 10
+            interfaces: ["Ethernet200"]
+            description: "pch description"
+            mode: "active"
+
+    - name: "day-1 vlan trunk mode on pch and interfaces"
+      sonic_vlan:
+        config:
+          - vlan_ids: [20, 30]  # [20, 30, 35-37]
+            vlan_mode: "trunk"
+            interfaces: ["Ethernet200", "Ethernet208"]
+            pch_id: [10]
+
+    - name: "day-1 Add member port to port-channel configuration"
+      sonic_port_channel:
+        config:
+          - pch_id: 100
+            interfaces: ["Ethernet216"]
+            description: "pch description 100"
+            mode: "active"
+    
+    - name: "day-1 vlan trunk mode on intrefaces"
+      sonic_vlan:
+        config:
+          - vlan_ids: [45]
+            vlan_mode: "trunk"
+            interfaces: ["Ethernet216"]
+    
+    - name: "day-2 pch part of vlan trunk mode , and remove vlan from interface as it is part of pch"
+      sonic_vlan:
+        config:
+          - vlan_ids: [45]
+            vlan_mode: "trunk"
+            interfaces: ["Ethernet216"]
+            pch_id: [100]
+
+    - name: "day-3 pch part of vlan, trunk mode to access mode"
+      sonic_vlan:
+        config:
+          - vlan_ids: [45]
+            vlan_mode: "access"
+            interfaces: ["Ethernet216"]
+            pch_id: [100]
+
+    - name: "day-4 pch part of vlan, access mode to trunk mode"
+      sonic_vlan:
+        config:
+          - vlan_ids: [45]
+            vlan_mode: "trunk"
+            interfaces: ["Ethernet216"]
+            pch_id: [100]
+
+    - name: "day-1 vlan trunk mode on intrefaces"
+      sonic_vlan:
+        config:
+          - vlan_ids: [46]
+            vlan_mode: "trunk"
+            interfaces: ["Ethernet224", "Ethernet232"]
+
+    - name: "day-2 intrefaces part of vlan, trunk mode to access mode"
+      sonic_vlan:
+        config:
+          - vlan_ids: [46]
+            vlan_mode: "access"
+            interfaces: ["Ethernet224", "Ethernet232"]
+    
+    - name: "day-2 intrefaces part of old vlan_id to new vlan_id, no mode change"
+      sonic_vlan:
+        config:
+          - vlan_ids: [47]
+            vlan_mode: "access"
+            interfaces: ["Ethernet232"]
+
+    - name: "day-4 intrefaces part of old vlan_id to new vlan_id, and access mode to trunk mode"
+      sonic_vlan:
+        config:
+          - vlan_ids: [47]
+            vlan_mode: "trunk"
+            interfaces: ["Ethernet224"]
+
+    - name: "day-1 vlan trunk mode on intrefaces"
+      sonic_vlan:
+        config:
+          - vlan_ids: [48-49]
+            vlan_mode: "trunk"
+            interfaces: ["Ethernet224", "Ethernet232"]
+
+    - name: "day-2 intrefaces part of vlan, trunk mode to access mode"
+      sonic_vlan:
+        config:
+          - vlan_ids: [48-49] # will aplly only 48
+            vlan_mode: "access"
+            interfaces: ["Ethernet224", "Ethernet232"]
+    
+    - name: "day-2 intrefaces part of old vlan_id to new vlan_id, no mode change"
+      sonic_vlan:
+        config:
+          - vlan_ids: [49]
+            vlan_mode: "access"
+            interfaces: ["Ethernet232"]
+
+    - name: "day-4 intrefaces part of old vlan_id to new vlan_id, and access mode to trunk mode"
+      sonic_vlan:
+        config:
+          - vlan_ids: [50-51]
+            vlan_mode: "trunk"
+            interfaces: ["Ethernet224"]
+
+    - name: configure ip_address on vlan
+      sonic_svi:
+        config: 
+          - vlan_id: "501"
+            ip_address: "100.10.0.5/25"

@@ -1,11 +1,13 @@
 from __future__ import absolute_import, division, print_function
-from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import \
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import \
     SonicConfig
-from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.utils import (
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.utils import (
     get_substring_starstwith_matched_item_list,
     substring_starstwith_check)
-from ansible_collections.aviznetworks.ansible.plugins.module_utils.network.sonic.utils.interfaces_util import config_ip_address
-
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.interfaces_util import config_ip_address
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.vlan_util import (
+    config_vlans
+    )
 
 class SVIConfig(object):
 
@@ -24,13 +26,13 @@ class SVIConfig(object):
 
             key = f"interface vlan {module_config['vlan_id']}"
             self.diff["interfaces"][key] = []
-            if key in self.running_config:
+            if key in self.running_config_interface:
                 commands.append(f"config terminal")
                 if len(delete_vlan) == 1:
                     commands.append(f"no interface vlan {module_config['vlan_id']}")
                     self.diff["interfaces"][key].append(f"- {key}")
                 else:
-                    config_list = self.running_config[key]
+                    config_list = self.running_config_interface[key]
                     commands.append(key)
                     if module_config['ip_address']:
                         cmd = f"ip address {module_config['ip_address']}"
@@ -48,8 +50,8 @@ class SVIConfig(object):
         for module_config in module_config_list:
             key = f"interface vlan {module_config['vlan_id']}"
             self.diff["interfaces"][key] = []
-            if key in self.running_config:
-                config_list = self.running_config.get(key, [])
+            if key in self.running_config_interface:
+                config_list = self.running_config_interface.get(key, [])
                 if module_config['ip_address']:
                     cmd = f"ip address {module_config['ip_address']}"
                     if cmd in config_list:
@@ -70,11 +72,14 @@ class SVIConfig(object):
         commands = []
         module_config_list = module.params['config']
         for module_config in module_config_list:
+            module_config['vlan_ids'] = [module_config['vlan_id']]
+            vlan_cmds, self.diff = config_vlans(module_config, config_list=self.running_config, diff=self.diff)
+            commands.extend(vlan_cmds)
             key = f"interface vlan {module_config['vlan_id']}"
             self.diff["interfaces"][key] = []
             init_config_cmds = ['config terminal', key]
             commands.extend(init_config_cmds)
-            config_list = self.running_config.get(key, [])
+            config_list = self.running_config_interface.get(key, [])
 
             if module_config['ip_address']:
                 cmds, self.diff = config_ip_address(module_config, config_list, diff=self.diff, key=key)
@@ -85,10 +90,10 @@ class SVIConfig(object):
     def get_config_commands(self, module, get_current_config=True):
         commands = list()
         # self.diff = True
-        self.diff = {"interfaces": {}}
+        self.diff = {"interfaces": {}, "vlan": {}}
         if get_current_config:
-            self.running_config = SonicConfig().get_running_configs(module)["interfaces"]
-        # self.running_config = self.running_config
+            self.running_config = SonicConfig().get_running_configs(module)
+            self.running_config_interface = self.running_config["interfaces"]
         if module.params['state'] == "delete":
             commands.extend(self.delete_config(module))
         elif module.params['state'] == "replace":

@@ -4,7 +4,7 @@
   gather_facts: no
   connection: network_cli
   collections:
-    - aviznetworks.sonic_fmcli
+    - aviznetworks.sonic
   
   tasks:
   # - name: show run data download

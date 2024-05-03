@@ -1,0 +1,73 @@
+---
+- name: "FMCLI Ports Configuration "
+  hosts: spine02
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic
+  
+  tasks:
+    # - debug: msg="ansible_host value for {{ inventory_hostname }} is {{ ansible_host }}"
+    - name: SONiC port configuration with wait_for and match=any
+      sonic_interfaces:
+        config:
+          - interface: "Ethernet64"
+            ip_address: 40.0.0.10/31
+            mtu: 9000
+            enable: true
+            description: "connected to Leaf2"
+          - interface: "Ethernet32"
+            ip_address: 40.0.0.8/31
+            mtu: 9000
+            enable: true
+            description: "connected to Leaf1"
+            
+    - name: SONiC loopback configuration merge
+      sonic_loopback:
+        config:
+          - loopback: 1
+            ip_address: 10.10.10.1/32
+
+    - name: Sonic router map config
+      sonic_bgp_route_maps:
+        config:
+          - map_name: "RM_SET_SRC"
+            action: permit
+            sequence_num: 10    
+            set:
+              ip: 10.10.10.1   
+
+    - name: Sonic router BGP config
+      sonic_bgp_neighbor:
+        config:
+          - bgp_asn: 1001
+            neighbor:
+              ipv4:
+                ips: ['40.0.0.9','40.0.0.11']
+                # ip: ['40.0.0.9','40.0.0.11','40.0.0.13','40.0.0.15']
+                remote_as: 1001
+                extended_nexthop: true
+
+    - name: Sonic router BGP config
+      sonic_bgp:
+        config:
+          bgp_asn: 1001
+          bgp:
+            - router_id: 10.10.10.1
+              ebgp_requires_policy: false
+              bestpath: true 
+   
+    - name: Sonic router BGP config
+      sonic_bgp_address_family:
+        config:
+          - bgp_asn: 1001
+            address_family: # address-family
+              ipv4:  #address-family ipv4 unicast
+                neighbor:
+                  ips: ['40.0.0.9','40.0.0.11']
+                  allowas_in: 1 # 1 to 10 or origin
+                  route_reflector_client: true
+                  next_hop_self: true
+                network: ['40.0.0.8/31','40.0.0.10/31']
+                redistribute: ["connected",'static']
+

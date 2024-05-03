@@ -4,13 +4,13 @@
 
 
 namespace=aviznetworks
-name=sonic_fmcli
+name=ansible
 version=1.0.0
 collection_file="$namespace-$name-$version.tar.gz"
 echo "$collection_file"
 
-rm -f /root/ansible_log.log
-ansible-galaxy collection install ansible.netcommon --force
+# rm -f /root/ansible_log.log
+# ansible-galaxy collection install ansible.netcommon --force
 
 if [ -n "$SUDO_USER" ]; then
     invoking_user=$SUDO_USER
@@ -21,18 +21,18 @@ fi
 
 echo $invoking_user
 
-mkdir -p /home/$invoking_user/.ansible/collections/ansible_collections/aviznetworks/sonic_fmcli
-rm -rf /home/$invoking_user/.ansible/collections/ansible_collections/aviznetworks/sonic_fmcli/* 
-sudo cp -rfu ./../aviznetworks.sonic_fmcli/* /home/$invoking_user/.ansible/collections/ansible_collections/aviznetworks/sonic_fmcli/
-echo "ls to /home/$invoking_user/.ansible/collections/ansible_collections/aviznetworks/sonic_fmcli/"
-ls /home/$invoking_user/.ansible/collections/ansible_collections/aviznetworks/sonic_fmcli/
+mkdir -p /home/$invoking_user/.ansible/collections/ansible_collections/aviznetworks/ansible
+rm -rf /home/$invoking_user/.ansible/collections/ansible_collections/aviznetworks/ansible/* 
+sudo cp -rfu ./../aviznetworks.sonic/* /home/$invoking_user/.ansible/collections/ansible_collections/aviznetworks/ansible/
+echo "ls to /home/$invoking_user/.ansible/collections/ansible_collections/aviznetworks/ansible/"
+ls /home/$invoking_user/.ansible/collections/ansible_collections/aviznetworks/ansible/
 
 
-mkdir -p /root/.ansible/collections/ansible_collections/aviznetworks/sonic_fmcli
-rm -rf /root/.ansible/collections/ansible_collections/aviznetworks/sonic_fmcli/*
-cp -rfu ./../aviznetworks.sonic_fmcli/* /root/.ansible/collections/ansible_collections/aviznetworks/sonic_fmcli/
-echo "ls to /root/.ansible/collections/ansible_collections/aviznetworks/sonic_fmcli/"
-ls /root/.ansible/collections/ansible_collections/aviznetworks/sonic_fmcli/
+mkdir -p /root/.ansible/collections/ansible_collections/aviznetworks/ansible
+rm -rf /root/.ansible/collections/ansible_collections/aviznetworks/ansible/*
+cp -rfu ./../aviznetworks.sonic/* /root/.ansible/collections/ansible_collections/aviznetworks/ansible/
+echo "ls to /root/.ansible/collections/ansible_collections/aviznetworks/ansible/"
+ls /root/.ansible/collections/ansible_collections/aviznetworks/ansible/
 
 
 # sudo rm -rf /root/.ansible/collections/ansible_collections/aviznetworks/sonic_fmcli/*
