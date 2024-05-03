@@ -1,4 +1,4 @@
-Ansible Collection for Community/Enterprise SONiC Distribution by Aviz Networks India Pvt. Ltd. 
+Ansible Collection by Aviz Networks India Pvt. Ltd. for Community/Enterprise SONiC Distribution 
 =================================================================================
 
 It includes Ansible core modules to provision and manage the Siwtch running Community/Enterprise SONiC Distribution. Sample playbooks and documentation are also included to show how the collection can be used.
@@ -50,7 +50,7 @@ Installation of Ansible
 
 Download Ansible-collection
 -----------------------------
-[**Ansible-collection**](https://github.com/AvizNetworks/aviznetworks.sonic/tree/master)
+[**Ansible-collection**](https://github.com/AvizNetworks/aviznetworks.sonic)
 
 
 Setting Environment for the playbook execution
