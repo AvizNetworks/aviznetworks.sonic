@@ -1,4 +1,5 @@
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 import traceback
@@ -14,6 +15,7 @@ except ImportError:
 
 try:
     import jinja2
+
     HAS_LIB = True
 except Exception as e:
     HAS_LIB = False
@@ -25,27 +27,33 @@ from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.s
     edit_config
 )
 from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.utils import (
-    get_substring_starstwith_matched_item_list, 
+    get_substring_starstwith_matched_item_list,
     substring_starstwith_check)
+
 
 def get_vlan_ids(module_config):
     # vlan_id: [10, 20, 100-110, 115, 117-120]
     vlan_id = []
+    if module_config["vlan_id"]:
+        module_config["vlan_ids"] = [module_config["vlan_id"]]
     for item in module_config["vlan_ids"]:
         item = str(item)
         if "-" in item:
             item_split = item.split("-")
-            for i in range(int(item_split[0]), int(item_split[1])+1):
+            for i in range(int(item_split[0]), int(item_split[1]) + 1):
                 vlan_id.append(str(i))
         else:
             vlan_id.append(item)
     return vlan_id
 
-def config_vlans(module_config, config_list, diff={}):
+
+def config_vlans(module_config, config_list, diff=None):
     # diff = {"vlan":{} , }
+    if diff is None:
+        diff = {}
     commands = []
     vlan_ids = get_vlan_ids(module_config)
-    
+
     for vlan_id in vlan_ids:
         key = f"vlan {vlan_id}"
         diff["vlan"][key] = []
@@ -67,15 +75,34 @@ def config_vlans(module_config, config_list, diff={}):
                         commands.append(cmd)
                         diff["vlan"][key].append(f"+ {cmd}")
             commands.extend(["end", "save"])
-        else:     
+        else:
             commands.append(key)
             diff["vlan"][key].append(f"+ {key}")
             if module_config.get("vrf_name"):
                 cmd = f"vrf member {module_config['vrf_name']}"
                 commands.append(cmd)
-                diff["vlan"][key].append(f"+ {cmd}")    
-            commands.extend(["end", "save"]) 
-                
+                diff["vlan"][key].append(f"+ {cmd}")
+            commands.extend(["end", "save"])
+
+    return commands, diff
+
+
+def config_anycast_gateway(module_config, config_list, diff=None, key=""):
+    if diff is None:
+        diff = {}
+    commands = []
+    cmd = f"anycast-gateway {module_config['anycast_gateway']}"
+    if cmd in config_list:
+        pass
+    elif substring_starstwith_check("anycast_gateway", config_list):
+        cmd_dlt = get_substring_starstwith_matched_item_list("anycast_gateway", config_list)
+        commands.append(f"no {cmd_dlt}")
+        commands.append(cmd)
+        diff["interfaces"][key].append(f"- {cmd_dlt}")
+        diff["interfaces"][key].append(f"+ {cmd}")
+    else:
+        commands.append(cmd)
+        diff["interfaces"][key].append(f"+ {cmd}")
     return commands, diff
 
 # def get_configured_vlan_members(config_list, vlan_id):

@@ -1,4 +1,5 @@
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 
@@ -13,13 +14,16 @@ class VlanArgs(object):
         "config": {
             "elements": "dict",
             "options": {
-                "vlan_ids": {"type": "list", "required": True},
-                "description": {"type": "str", "default": ""},
+                "vlan_ids": {"type": "list"},
+                "vlan_id": {"type": "str"},
+                "name": {"type": "str"},
+                # "description": {"type": "str", "default": ""},
                 "vrf_name": {"type": "str", "default": ""},
-                "interfaces": {"type": "list", "default": []}, # portchannel10 / Ethernet10
+                "interfaces": {"type": "list", "default": []},  # portchannel10 / Ethernet10
                 "vlan_mode": {"type": "str", "default": ""},
-                "pch_id": {"type": "list", "default": []},
-                "ip_address": {"type": "str"}, # 10.4.4.4/24
+                "pch_ids": {"type": "list", "default": []},
+                "ip_address": {"type": "str"},  # 10.4.4.4/24
+                "anycast_gateway": {"type": "str"}  # 10.4.4.4/24
             },
             "type": "list"
         },
@@ -28,9 +32,9 @@ class VlanArgs(object):
             "default": "merge",
             "type": "str"
         },
-        "wait_for": {"elements": "str" , "type": "list"},
-        "match": {"default": "all", "choices":["all", "any"]},
+        "wait_for": {"elements": "str", "type": "list"},
+        "match": {"default": "all", "choices": ["all", "any"]},
         "retries": {"default": 10, "type": "int"},
         "interval": {"default": 1, "type": "int"},
-        "commands": {"elements": "str" , "type": "list"}
+        "commands": {"elements": "str", "type": "list"}
     }
