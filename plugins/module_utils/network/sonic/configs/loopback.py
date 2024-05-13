@@ -1,16 +1,18 @@
 from __future__ import absolute_import, division, print_function
-from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import \
-    SonicConfig
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import (
+    SonicConfig)
 from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.utils import (
     get_substring_starstwith_matched_item_list,
     substring_starstwith_check)
-from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.interfaces_util import config_ip_address
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.interfaces_util import (
+    config_ip_address)
 
 
 class LoopbackConfig(object):
 
     def __init__(self) -> None:
-        pass
+        self.running_config = None
+        self.diff = None
 
     def delete_config(self, module):
         commands = []

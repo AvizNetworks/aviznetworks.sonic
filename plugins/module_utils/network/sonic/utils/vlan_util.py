@@ -34,9 +34,10 @@ from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.u
 def get_vlan_ids(module_config):
     # vlan_id: [10, 20, 100-110, 115, 117-120]
     vlan_id = []
+    config_copy = module_config.copy()
     if module_config["vlan_id"]:
-        module_config["vlan_ids"] = [module_config["vlan_id"]]
-    for item in module_config["vlan_ids"]:
+        config_copy["vlan_ids"] = [module_config["vlan_id"]]
+    for item in config_copy["vlan_ids"]:
         item = str(item)
         if "-" in item:
             item_split = item.split("-")
@@ -47,10 +48,8 @@ def get_vlan_ids(module_config):
     return vlan_id
 
 
-def config_vlans(module_config, config_list, diff=None):
+def config_vlans(module_config, config_list, diff={}):
     # diff = {"vlan":{} , }
-    if diff is None:
-        diff = {}
     commands = []
     vlan_ids = get_vlan_ids(module_config)
 
@@ -87,9 +86,7 @@ def config_vlans(module_config, config_list, diff=None):
     return commands, diff
 
 
-def config_anycast_gateway(module_config, config_list, diff=None, key=""):
-    if diff is None:
-        diff = {}
+def config_anycast_gateway(module_config, config_list, diff={}, key=""):
     commands = []
     cmd = f"anycast-gateway {module_config['anycast_gateway']}"
     if cmd in config_list:
@@ -104,5 +101,3 @@ def config_anycast_gateway(module_config, config_list, diff=None, key=""):
         commands.append(cmd)
         diff["interfaces"][key].append(f"+ {cmd}")
     return commands, diff
-
-# def get_configured_vlan_members(config_list, vlan_id):

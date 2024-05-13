@@ -101,7 +101,7 @@ class VlanConfig(object):
 
     def vlan_merge_config_pch(self, module_config, module_config_pch_ids, vlan_ids_list):
         commands = []
-        # for pch in module_config.get("interfaces" []):  pch10, 20
+        # for pch in module_config.get("interfaces" []):  "pch10", "20", "portchannel30"
         for pch in module_config_pch_ids:
             configured_pch_interfaces = get_portchannel_member_interfaces(self.running_interface_conf, pch)
             for inf in configured_pch_interfaces:
@@ -189,9 +189,13 @@ class VlanConfig(object):
                 cmds = self.vlan_merge_config_anycast_gateway(module_config, vlan_ids_list)
                 commands.extend(cmds)
 
-            module_config_pch_ids = [pid for pid in module_config.get("interfaces", []) if
+            module_pch = [pid for pid in module_config.get("interfaces", []) if
                                      "ethernet" not in pid.lower()]
-            module_config_pch_ids = [s for s in module_config_pch_ids if any(char.isdigit() for char in s)]
+            module_config_pch_ids = []
+
+            for s in module_pch:
+                pch_id_str = "".join([c for c in str(s) if c.isdigit()])
+                module_config_pch_ids.append(pch_id_str)
             module_config_ports = [prt for prt in module_config.get("interfaces", []) if "ethernet" in prt.lower()]
 
             # for pch in module_config.get("pch_id"):
@@ -307,7 +311,6 @@ class VlanConfig(object):
         delete_configs = ['vlan_ids', 'vlan_id', 'name', 'vrf_name', 'interfaces', 'ip_address', 'anycast_gateway']
         for module_config in module_config_list:
             vlan_ids_list = get_vlan_ids(module_config)
-
             filtered_module_config = {key: value for key, value in module_config.items() if
                                       value is not None and value not in ('', [])}
             delete_vlan_item = [item for item in list(filtered_module_config.keys()) if item in delete_configs]

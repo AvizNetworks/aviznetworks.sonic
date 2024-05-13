@@ -1,4 +1,5 @@
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 
@@ -13,7 +14,7 @@ class SVIArgs(object):
         "config": {
             "elements": "dict",
             "options": {
-                "ip_address": {"type": "str"}, # 10.4.4.4/24
+                "ip_address": {"type": "str"},  # 10.4.4.4/24
                 "vlan_id": {"type": "str", "required": True}
                 # "vlan_range": {"type": "int", "required": True}
             },
@@ -24,10 +25,10 @@ class SVIArgs(object):
             "default": "merge",
             "type": "str"
         },
-        "wait_for": {"elements": "str" , "type": "list"},
-        "match": {"default": "all", "choices":["all", "any"]},
+        "wait_for": {"elements": "str", "type": "list"},
+        "match": {"default": "all", "choices": ["all", "any"]},
         "retries": {"default": 10, "type": "int"},
         "interval": {"default": 1, "type": "int"},
-        "commands": {"elements": "str" , "type": "list"},
-        "diff": {"elements": "str" , "type": "list"}
+        "commands": {"elements": "str", "type": "list"},
+        "diff": {"elements": "str", "type": "list"}
     }
