@@ -27,10 +27,10 @@ class PortchannelArgs(object):
                                       "50G",
                                       "100G",
                                       "400G"]
-                                      },
+                          },
                 "mode": {"type": "str",
-                    "choices": ["active", "static"]
-                },
+                         "choices": ["active", "static"]
+                         },
             },
             "type": "list"
         },

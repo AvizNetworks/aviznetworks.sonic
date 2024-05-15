@@ -16,7 +16,8 @@ from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.u
 class InterfaceConfig(object):
 
     def __init__(self) -> None:
-        pass
+        self.running_config = None
+        self.diff = None
 
     def delete_config(self, module):
         commands = []
@@ -37,7 +38,7 @@ class InterfaceConfig(object):
                     else:
                         config_list = self.running_config[key]
                         commands.append(f"interface ethernet {config_interface}")
-                        if (module_config['enable'] or module_config['enable'] is False):
+                        if module_config['enable'] or module_config['enable'] is False:
                             if "shutdown" in config_list or "no shutdown" in config_list:
                                 commands.append(f"no shutdown")
                         if module_config['ip']:
@@ -82,7 +83,7 @@ class InterfaceConfig(object):
                     for item in delete_config_list:
                         commands.append(f"no {item}")
                 commands.extend(['end', 'save'])
-                commands.extend(self.merge_config(module, module_config_list=[module_config], delete=False))
+                commands.extend(self.merge_config(module))
 
         return commands
 

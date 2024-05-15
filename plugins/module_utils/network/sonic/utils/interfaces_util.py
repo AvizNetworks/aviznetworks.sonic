@@ -111,7 +111,9 @@ def config_speed(module_config, config_list, diff={}, key=""):
         
     return commands, diff
 
-def config_description(module_config, config_list, diff={}, key=""):
+def config_description(module_config, config_list, diff=None, key=""):
+    if diff is None:
+        diff = {}
     commands = []
     cmd = f"description {module_config['description']}"
     if cmd in config_list:

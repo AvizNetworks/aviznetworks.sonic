@@ -1,11 +1,12 @@
-
 from __future__ import absolute_import, division, print_function
-from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import SonicConfig
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.configs.sonic_config.sonic_config import \
+    SonicConfig
 
 
 class BGPProtocolConfig(object):
     def __init__(self) -> None:
-        pass
+        self.diff = None
+        self.running_bgp_conf = None
 
     def delete_config(self, module):
         commands = list()
@@ -27,7 +28,7 @@ class BGPProtocolConfig(object):
         return commands
 
     def get_config_commands(self, module, get_current_config=True):
-        commands= list()
+        commands = list()
         self.diff = {}
         if get_current_config:
             self.running_bgp_conf = SonicConfig().get_running_configs(module)
@@ -35,5 +36,5 @@ class BGPProtocolConfig(object):
         if module.params['state'] in ["delete"]:
             commands.extend(self.delete_config(module))
         else:
-            commands.extend(self.config_bgpprotocol(module))      
-        return  commands, self.diff 
+            commands.extend(self.config_bgpprotocol(module))
+        return commands, self.diff
