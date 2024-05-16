@@ -18,7 +18,7 @@ class InterfacesArgs(object):
                 "enable": {"type": "bool", "default": None},
                 "mtu": {"type": "int", "default": None},
                 "ip_address": {"type": "str"},  # 10.4.4.4/24
-                "interface": {"type": "list", "required": True},
+                "interfaces": {"type": "list", "required": True},
                 "autoneg": {"type": "bool", "default": None},  # not supported in fmcli
                 "speed": {"type": "str",
                           "choices": ["1G",

@@ -23,13 +23,13 @@ class InterfaceConfig(object):
         commands = []
 
         module_config_list = module.params['config']
-        delete_configs = ['interface', 'enable', 'autoneg', 'mtu', 'speed', 'description', 'fec', 'ip_address']
+        delete_configs = ['interfaces', 'enable', 'autoneg', 'mtu', 'speed', 'description', 'fec', 'ip_address']
         for module_config in module_config_list:
             filtered_module_config = {key: value for key, value in module_config.items() if
                                       value is not None and value not in ('', [])}
             delete_interface = [item for item in list(filtered_module_config.keys()) if item in delete_configs]
 
-            for config_interface in module_config['interface']:
+            for config_interface in module_config['interfaces']:
                 key = f"interface ethernet {config_interface}"
                 if key in self.running_config:
                     commands.append(f"config terminal")
@@ -68,13 +68,13 @@ class InterfaceConfig(object):
     def replace_config(self, module):
         commands = []
         module_config_list = module.params['config']
-        delete_configs = ['interface', 'enable', 'autoneg', 'mtu', 'speed', 'description', 'fec', 'ip_address']
+        delete_configs = ['interfaces', 'enable', 'autoneg', 'mtu', 'speed', 'description', 'fec', 'ip_address']
         for module_config in module_config_list:
             filtered_module_config = {key: value for key, value in module_config.items() if
                                       value is not None and value not in ('', [])}
-            delete_interface = [item for item in list(filtered_module_config.keys()) if item in delete_configs]
+            # delete_interface = [item for item in list(filtered_module_config.keys()) if item in delete_configs]
 
-            for config_interface in module_config['interface']:
+            for config_interface in module_config['interfaces']:
                 key = f"interface ethernet {config_interface}"
                 if key in self.running_config:
                     commands.append(f"config terminal")
@@ -93,7 +93,7 @@ class InterfaceConfig(object):
         for module_config in module_config_list:
             for config_interface in module_config['interface']:
                 key = f"interface ethernet {config_interface}"
-                self.diff["interfaces"][key] = []
+                self.diff["interfaces"][key] = self.diff["interfaces"].get(key, [])
                 init_config_cmds = ['config terminal', key]
                 commands.extend(init_config_cmds)
                 config_list = self.running_config.get(key, [])
@@ -126,7 +126,7 @@ class InterfaceConfig(object):
                 if module_config['fec']:
                     cmds, self.diff = config_fec(module_config, config_list, diff=self.diff, key=key)
                     commands.extend(cmds)
-                
+
                 commands.extend(['end', 'save'])
         return commands
 

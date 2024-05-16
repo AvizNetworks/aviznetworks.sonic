@@ -29,7 +29,7 @@ class VlanConfig(object):
     def vlan_merge_config_SVI(self, module_config, vlan_ids_list):
         commands = []
         key = f"interface vlan {vlan_ids_list[0]}"
-        self.diff["interfaces"][key] = []
+        self.diff["interfaces"][key] = self.diff["interfaces"].get(key, [])
         Key_data_list = self.running_interface_conf.get(key, [])
         cmds, self.diff = config_ip_address(module_config, config_list=Key_data_list, diff=self.diff, key=key)
         if cmds:
@@ -41,7 +41,7 @@ class VlanConfig(object):
     def vlan_merge_config_anycast_gateway(self, module_config, vlan_ids_list):
         commands = []
         key = f"interface vlan {vlan_ids_list[0]}"
-        self.diff["interfaces"][key] = []
+        self.diff["interfaces"][key] = self.diff["interfaces"].get(key, [])
         Key_data_list = self.running_interface_conf.get(key, [])
         cmds, self.diff = config_anycast_gateway(module_config, config_list=Key_data_list, diff=self.diff, key=key)
         if cmds:
@@ -61,7 +61,7 @@ class VlanConfig(object):
 
             if eth not in configured_pch_interfaces:
                 key = f"interface ethernet {eth}"
-                self.diff["interfaces"][key] = []
+                self.diff["interfaces"][key] = self.diff["interfaces"].get(key, [])
                 init_config_cmds = ['config terminal', key]
                 commands.extend(init_config_cmds)
                 config_list_pch = self.running_interface_conf.get(key, [])
@@ -131,7 +131,7 @@ class VlanConfig(object):
                     commands.extend(["end", "save"])
 
             key = f"interface port-channel {pch}"
-            self.diff["interfaces"][key] = []
+            self.diff["interfaces"][key] = self.diff["interfaces"].get(key, [])
             init_config_cmds = ['config terminal', key]
             commands.extend(init_config_cmds)
             config_list_pch = self.running_interface_conf.get(key, [])
@@ -208,9 +208,22 @@ class VlanConfig(object):
             commands.extend(cmds)
         return commands
 
-    def delete_vlans_interfaces_config(self, vlan_id):
+    def delete_vlans_interfaces_config(self, vlan_id, interfaces=[]):
         commands = []
-        for key, value in self.running_interface_conf.items():
+        interfaces_data = self.running_interface_conf
+        if interfaces:
+            interfaces_data = {}
+            module_pch_interface_key = []
+            for intf in interfaces:
+                if "ethernet" not in intf.lower():
+                    pch_id_str = "".join([c for c in str(intf) if c.isdigit()])
+                    module_pch_interface_key.append(f"interface port-channel {pch_id_str}")
+                else:
+                    module_pch_interface_key.append(f"interface ethernet {intf}")
+            for key in module_pch_interface_key:
+                if key in self.running_interface_conf:
+                    interfaces_data[key] = self.running_interface_conf[key]
+        for key, value in interfaces_data.items():
             trunk_vlan_cmd = f"switchport trunk allowed vlan add {vlan_id}"
             access_vlan_cmd = f"switchport access vlan {vlan_id}"
             trunk_lst = get_list_substring_starstwith_matched_item_list("switchport trunk allowed", value)
@@ -218,14 +231,15 @@ class VlanConfig(object):
             access_lst = get_substring_starstwith_matched_item_list(access_vlan_cmd, value)
             if trunk_vlan_id_list:
                 commands.extend(["config", key])
-                self.diff["interfaces"][key] = []
+                self.diff["interfaces"][key] = self.diff["interfaces"].get(key, [])
+                cmd = f"no {trunk_vlan_cmd}"
+                commands.append(cmd)
+                self.diff["interfaces"][key].append(f"- {cmd}")
                 if len(trunk_lst) == 1:
                     cmd = f"no switchport mode trunk"
                     commands.append(cmd)
                     self.diff["interfaces"][key].append(f"- {cmd}")
-                cmd = f"no {trunk_vlan_cmd}"
-                commands.extend([cmd, "end", "save"])
-                self.diff["interfaces"][key].append(f"- {cmd}")
+                commands.extend(["end", "save"])
             elif access_lst:
                 commands.extend(["config", key])
                 cmd = f"no {access_vlan_cmd}"
@@ -236,9 +250,10 @@ class VlanConfig(object):
     def cleanup_vlan_svi_config(self, vlan_id):
         # interface vlan 100
         commands = []
+        self.diff["cleanup"] = "inside cleanup"
         key = f"interface vlan {vlan_id}"
         if key in self.running_interface_conf:
-            self.diff["interfaces"][key] = []
+            self.diff["interfaces"][key] = self.diff["interfaces"].get(key, [])
             commands.append(f"config")
             if len(self.running_interface_conf.get(key)) >= 1:
                 commands.append(key)
@@ -256,13 +271,13 @@ class VlanConfig(object):
         key = f"interface vlan {vlan_id}"
         if key in self.running_interface_conf:
             configs_value = self.running_interface_conf.get(key)
-            self.diff["interfaces"][key] = []
+            self.diff["interfaces"][key] = self.diff["interfaces"].get(key, [])
             if len(configs_value) >= 1:
                 ip_adds = get_list_substring_starstwith_matched_item_list(f"ip address {ip_address}", configs_value)
                 if ip_adds:
                     commands.extend(["config", key])
-                    commands.append(f"no {ip_adds}")
-                    self.diff["interfaces"][key].append(f"- {ip_adds}")
+                    commands.append(f"no {ip_adds[0]}")
+                    self.diff["interfaces"][key].append(f"- {ip_adds[0]}")
                     commands.extend(["end", "save"])
         return commands
 
@@ -272,14 +287,14 @@ class VlanConfig(object):
         key = f"interface vlan {vlan_id}"
         if key in self.running_interface_conf:
             configs_value = self.running_interface_conf.get(key)
-            self.diff["interfaces"][key] = []
+            self.diff["interfaces"][key] = self.diff["interfaces"].get(key, [])
             if len(configs_value) >= 1:
                 ip_adds = get_list_substring_starstwith_matched_item_list(f"anycast-gateway {ip_address}",
                                                                           configs_value)
                 if ip_adds:
                     commands.extend(["config", key])
-                    commands.append(f"no {ip_adds}")
-                    self.diff["interfaces"][key].append(f"- {ip_adds}")
+                    commands.append(f"no {ip_adds[0]}")
+                    self.diff["interfaces"][key].append(f"- {ip_adds[0]}")
                     commands.extend(["end", "save"])
         return commands
 
@@ -324,7 +339,8 @@ class VlanConfig(object):
                     if 'vrf_name' in delete_vlan_item:
                         pass
                     if 'interfaces' in delete_vlan_item:
-                        cmds = self.delete_vlans_interfaces_config(vlan_id=v_id)
+                        interfaces = module_config.get("interfaces", [])
+                        cmds = self.delete_vlans_interfaces_config(vlan_id=v_id, interfaces=interfaces)
                         commands.extend(cmds)
                     if 'ip_address' in delete_vlan_item:
                         cmds = self.delete_vlan_svi_config(vlan_id=v_id, ip_address=module_config['ip_address'])
