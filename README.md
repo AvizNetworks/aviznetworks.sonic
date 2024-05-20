@@ -21,12 +21,11 @@ Collection core modules
 ------------------------
 Name | Description | Connection type
 --- | --- | ---
-[**sonic_command**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.uc2upy5nnyxz)|Run commands through the ISCLI|network_cli
-[**sonic_bgp**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.uc2upy5nnyxz)| Manage global BGP and its parameters|network_cli
-[**sonic_bgp_address_family**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.uc2upy5nnyxz)| Manage global BGP address-family and its parameters|network_cli
-[**sonic_bgp_neighbor**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.uc2upy5nnyxz)| Manage a BGP neighbor and its parameters|network_cli
-[**sonic_bgp_route_maps**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.uc2upy5nnyxz)| Manage route map configuration|network_cli
-[**sonic_interfaces**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.uc2upy5nnyxz)| Configure Interface attributes|network_cli
+[**sonic_bgp**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.k5ybnvun4wn1)| Manage global BGP and its parameters|network_cli
+[**sonic_bgp_address_family**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.vd4rjdnryqjy)| Manage global BGP address-family and its parameters|network_cli
+[**sonic_bgp_neighbor**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.h9q3wwm9xjjm)| Manage a BGP neighbor and its parameters|network_cli
+[**sonic_bgp_route_maps**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.xzsodu287jkb)| Manage route map configuration|network_cli
+[**sonic_interfaces**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.drhxo0crwc9q)| Configure Interface attributes|network_cli
 [**sonic_mclag**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.uc2upy5nnyxz)| Manage multi chassis link aggregation groups domain (MCLAG) and its parameters|network_cli
 [**sonic_vlan**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.uc2upy5nnyxz)| Manage VLAN and its parameters|network_cli
 [**sonic_port_channel**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.uc2upy5nnyxz)| Manage portchannel and its parameters|network_cli
