@@ -1,9 +1,14 @@
 ***********Ansible Module aviznetworks.sonic***********
 =======================================================
 
+
+________________________________________________________
+________________________________________________________
+
+
 # Day-2...day-n configuration difference
 
-In the Ansible script tasks, the aviznetworks.sonic module will check and compare the configuration of each task with the existing configuration on the devices. The module will merge the configurations if a similar configuration supports the protocol rules, or the new configurations will override it.
+In the Ansible script tasks, the `aviznetworks.sonic` module will check and compare the configuration of each task with the existing configuration on the devices. The module will merge the configurations if a similar configuration supports the protocol rules, or the new configurations will override it.
 
 ### Example:
 
