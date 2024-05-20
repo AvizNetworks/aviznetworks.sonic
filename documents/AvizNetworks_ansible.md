@@ -188,7 +188,7 @@ Here, `day-n` task will delete the inner configuration only mentioned under the 
         ]
 
 
-   ### ***a) Delete whole configs***
+   ### ***b) Delete whole configs***
     # day-0, day-1, ...
 
     - name: SONiC port configuration
