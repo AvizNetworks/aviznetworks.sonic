@@ -8,7 +8,7 @@ ________________________________________________________
 
 # Day-2...day-n configuration difference
 
-     In the Ansible script tasks, the `aviznetworks.sonic` module will check and compare the configuration of each task with the existing configuration on the devices. The module will merge the configurations if a similar configuration supports the protocol rules, or the new configurations will override it.
+    In the Ansible script tasks, the `aviznetworks.sonic` module will check and compare the configuration of each task with the existing configuration on the devices. The module will merge the configurations if a similar configuration supports the protocol rules, or the new configurations will override it.
 
 ### Example:
 
@@ -32,7 +32,7 @@ ________________________________________________________
                   description: "fmcli description_eth32"
     
 
-        In the example above, on `day-2 ... days-n` configuration, updating the MTU and configure 
+    In the example above, on `day-2 ... days-n` configuration, updating the MTU and configure 
 the port description. In the log, `Diff` shows, removing the old mtu value and adding the new value. 
 Only **description** getting added, because in the old configuration description was not provided.
 
@@ -58,7 +58,7 @@ ________________________________________________________________________________
 Two State supports will `merge/delete` the configuration on `day-0 ... day-n` task operation.
 
 ## **&nbsp;&nbsp;1. Merge**
-      A default operation, will be used in case of `merge/add/update/override` 
+     A default operation, will be used in case of `merge/add/update/override` 
 configurations.
 
     # day-0
@@ -92,7 +92,7 @@ configurations.
            state: merge  # default
 
 
-      In this configuration, it will check if any configuration exists it will get overridden and if 
+     In this configuration, it will check if any configuration exists it will get overridden and if 
 it does not exist it will get added as a new configuration.
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;log:
@@ -128,7 +128,7 @@ it does not exist it will get added as a new configuration.
 
 ## **&nbsp;&nbsp;2. Delete**
 
-      It will delete the configuration if it already exists.
+    It will delete the configuration if it already exists.
     
    ### ***&nbsp;&nbsp;&nbsp;&nbsp;a) Delete inner configs***
     # day-0
@@ -153,7 +153,7 @@ it does not exist it will get added as a new configuration.
                description: "fmcli description"
            state: delete
 
-      Here, `day-n` task will delete the inner configuration only mentioned under the interface.
+    Here, `day-n` task will delete the inner configuration only mentioned under the interface.
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log:
     # Day-0 
@@ -214,7 +214,7 @@ it does not exist it will get added as a new configuration.
               - interfaces: ["Ethernet32", "Ethernet36"]
             state: delete  
 
-      Here, `day-n` task will delete the complete configuration for the listed interfaces
+     Here, `day-n` task will delete the complete configuration for the listed interfaces
 
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log:
@@ -270,9 +270,9 @@ ________________________________________________________________________________
 ________________________________________________________________________________________________________________________
 
 # Ports/Interface
-      Configuring and deleting multiple interfaces.
+    Configuring and deleting multiple interfaces.
 
-      Executes the task with the module `sonic_interfaces`. Provide the configuration
+    Executes the task with the module `sonic_interfaces`. Provide the configuration
 data as a list under the “**config**” key. Here “**interface**” is the primary key.
 
 **&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
@@ -308,10 +308,10 @@ ________________________________________________________________________________
 ________________________________________________________________________________________________________________________
 
 # Loopback
-      A loopback interface is a virtual Layer 3 interface. A loopback interface emulates a physical interface and is always 
+    A loopback interface is a virtual Layer 3 interface. A loopback interface emulates a physical interface and is always 
 in the UP state.
 
-      To configure and delete multiple loopbacks, execute the task with the module 
+    To configure and delete multiple loopbacks, execute the task with the module 
 `sonic_loopback`. Provide the configuration data as a list under the “**config**” key. Here “**loopback_id*” is the 
 primary key.
 
@@ -368,12 +368,12 @@ ________________________________________________________________________________
 ________________________________________________________________________________________________________________________
 
 # Vlan
-      Configure and delete multiple vlans.
+    Configure and delete multiple vlans.
 
-      The switch supports up to `4094` VLANs. Each can be identified with a number 
+    The switch supports up to `4094` VLANs. Each can be identified with a number 
 between 2 and 4094.
 
-      To configure Vlans execute the task with the module `sonic_vlan`. Provide the 
+    To configure Vlans execute the task with the module `sonic_vlan`. Provide the 
 configuration data as a list under the “**config**” key. Here “**vlan_ids**” is the primary key.
 
 **&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
@@ -426,9 +426,9 @@ ________________________________________________________________________________
 ________________________________________________________________________________________________________________________
 
 # Portchannel
-      Configure and delete multiple port-channel.
+    Configure and delete multiple port-channel.
 
-      To configure port-channel, execute the task with the module 
+    To configure port-channel, execute the task with the module 
 `sonic_port_channel`. Provide the configuration data as a list under the “**config**” key. Here “**pch_id**” is 
 the primary key.
 
@@ -463,7 +463,7 @@ ________________________________________________________________________________
 
 # BGP
 ## &nbsp;&nbsp;1. BGP router
-      To configure the BGP router, execute the task with the module `sonic_bgp`.
+    To configure the BGP router, execute the task with the module `sonic_bgp`.
 Provide the configuration data as a list under the “**config**” key. Here “**bgp_asn**” is the primary key.
 
 A BGP configuration data list should be under the key “**bgp**”.
@@ -493,7 +493,7 @@ A BGP configuration data list should be under the key “**bgp**”.
 
 ________________________________________________________________________________________________________________________
 ## &nbsp;&nbsp;2. bgp_neighbors(IPv4)
-      To configure the bgp_neighbors, execute the task with the module 
+    To configure the bgp_neighbors, execute the task with the module 
 `sonic_bgp_neighbor`. Provide the configuration data as a list under the “**config**” key. Here “**bgp_asn**” is the 
 primary key.
 
@@ -524,7 +524,7 @@ bgp_neighbor ipv4 configuration data list should be under the key “**neighbor:
 ________________________________________________________________________________________________________________________
 
 ## &nbsp;&nbsp;3. bgp_route_maps
-      To configure bgp route maps, execute the task with the module 
+    To configure bgp route maps, execute the task with the module 
 `sonic_bgp_route_maps`. Provide the configuration data as a list under the “**config**” key. Here “**map_name**” 
 is the primary key.
 
@@ -551,7 +551,7 @@ is the primary key.
 
 ________________________________________________________________________________________________________________________
 ## &nbsp;&nbsp;4. bgp_address_family
-      To configure bgp address family, execute the task with the module 
+    To configure bgp address family, execute the task with the module 
 `sonic_bgp_address_family`. Provide the configuration data as a list under the “**config**” key. Here “**bgp_asn**” is 
 the primary key.
 
@@ -585,7 +585,7 @@ ________________________________________________________________________________
 ________________________________________________________________________________________________________________________
 
 # MLAG
-      Multi-Chassis Link Aggregation Group, executes the task with the module 
+    Multi-Chassis Link Aggregation Group, executes the task with the module 
 `sonic_mlag`. Provide the configuration data as a list under the “**config**” key. Here “**domain_id**” is the 
 primary key.
 
