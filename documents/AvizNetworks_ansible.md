@@ -8,7 +8,7 @@ ________________________________________________________
 
 # Day-2...day-n configuration difference
 
-In the Ansible script tasks, the `aviznetworks.sonic` module will check and compare the configuration of each task with the existing configuration on the devices. The module will merge the configurations if a similar configuration supports the protocol rules, or the new configurations will override it.
+     In the Ansible script tasks, the `aviznetworks.sonic` module will check and compare the configuration of each task with the existing configuration on the devices. The module will merge the configurations if a similar configuration supports the protocol rules, or the new configurations will override it.
 
 ### Example:
 
@@ -38,7 +38,7 @@ Only **description** getting added, because in the old configuration description
 
 
 
-###     log:
+### &nbsp;&nbsp;&nbsp;&nbsp;log:
 
     "diff": {
                 "interfaces": {
@@ -58,7 +58,7 @@ ________________________________________________________________________________
 Two State supports will `merge/delete` the configuration on `day-0 ... day-n` task operation.
 
 ## **&nbsp;&nbsp;1. Merge**
-           A default operation, will be used in case of `merge/add/update/override` 
+      A default operation, will be used in case of `merge/add/update/override` 
 configurations.
 
     # day-0
@@ -92,7 +92,7 @@ configurations.
            state: merge  # default
 
 
-           In this configuration, it will check if any configuration exists it will get overridden and if 
+      In this configuration, it will check if any configuration exists it will get overridden and if 
 it does not exist it will get added as a new configuration.
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;log:
@@ -128,7 +128,7 @@ it does not exist it will get added as a new configuration.
 
 ## **&nbsp;&nbsp;2. Delete**
 
-           It will delete the configuration if it already exists.
+      It will delete the configuration if it already exists.
     
    ### ***&nbsp;&nbsp;&nbsp;&nbsp;a) Delete inner configs***
     # day-0
@@ -153,7 +153,7 @@ it does not exist it will get added as a new configuration.
                description: "fmcli description"
            state: delete
 
-           Here, `day-n` task will delete the inner configuration only mentioned under the interface.
+      Here, `day-n` task will delete the inner configuration only mentioned under the interface.
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log:
     # Day-0 
@@ -214,7 +214,7 @@ it does not exist it will get added as a new configuration.
               - interfaces: ["Ethernet32", "Ethernet36"]
             state: delete  
 
-           Here, `day-n` task will delete the complete configuration for the listed interfaces
+      Here, `day-n` task will delete the complete configuration for the listed interfaces
 
 
 ### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;log:
@@ -270,12 +270,12 @@ ________________________________________________________________________________
 ________________________________________________________________________________________________________________________
 
 # Ports/Interface
-           Configuring and deleting multiple interfaces.
+      Configuring and deleting multiple interfaces.
 
-           Executes the task with the module `sonic_interfaces`. Provide the configuration
+      Executes the task with the module `sonic_interfaces`. Provide the configuration
 data as a list under the “**config**” key. Here “**interface**” is the primary key.
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Supported keys/arguments - value:</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
 
 | key         | description                                                                                                                                                                       |
 |-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -287,7 +287,7 @@ data as a list under the “**config**” key. Here “**interface**” is the p
 | fec         | - forward-error-correction <br> - Choose a value from the list: `["rs", "fc", "none"]`                                                                                            |
 | speed       | - Choose a value from the list:`["1G", "10G", "25G", "40G", "50G", "100G", "400G"]`                                                                                               |
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Sample playbook task</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       - name: SONiC port configuration
          sonic_interfaces:
@@ -308,21 +308,21 @@ ________________________________________________________________________________
 ________________________________________________________________________________________________________________________
 
 # Loopback
-           A loopback interface is a virtual Layer 3 interface. A loopback interface emulates a physical interface and is always 
+      A loopback interface is a virtual Layer 3 interface. A loopback interface emulates a physical interface and is always 
 in the UP state.
 
-           To configure and delete multiple loopbacks, execute the task with the module 
+      To configure and delete multiple loopbacks, execute the task with the module 
 `sonic_loopback`. Provide the configuration data as a list under the “**config**” key. Here “**loopback_id*” is the 
 primary key.
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Supported keys/arguments - value:</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
 
 | key         | description                                                                                                         |
 |-------------|---------------------------------------------------------------------------------------------------------------------|
 | loopback_id | - a primary key argument<br>- int type. **Ex:** 1                                                                   |
 | ip_address  | - Configure the IP(v4) address to an Interface. <br> - provide the IP address with a mask. **Ex:** 10.4.4.4/24 <br> |
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Sample playbook task</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       # task 1: add or merge the loopback configuration
       - name: SONiC loopback configuration merge
@@ -368,15 +368,15 @@ ________________________________________________________________________________
 ________________________________________________________________________________________________________________________
 
 # Vlan
-           Configure and delete multiple vlans.
+      Configure and delete multiple vlans.
 
-           The switch supports up to `4094` VLANs. Each can be identified with a number 
+      The switch supports up to `4094` VLANs. Each can be identified with a number 
 between 2 and 4094.
 
-           To configure Vlans execute the task with the module `sonic_vlan`. Provide the 
+      To configure Vlans execute the task with the module `sonic_vlan`. Provide the 
 configuration data as a list under the “**config**” key. Here “**vlan_ids**” is the primary key.
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Supported keys/arguments - value:</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
 
 | key             | description                                                                                                                                                                                                                                                                                                                      |
 |-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -387,7 +387,7 @@ configuration data as a list under the “**config**” key. Here “**vlan_ids*
 | anycast_gateway | - The command sequence configures an anycast gateway IP address for a specific VLAN interface<br>- provide the IP address with a mask. **Ex:** 10.4.4.4/24<br>- Task will configure the IP address only on the first `vlan_ids` from the list or can be used `vlan_id`                                                           |
 | ip_address      | - SVI(Switch Virtual Interface)<br>- Configure the IP address to the Vlan.<br>- provide the IP address with a mask. **Ex:** 10.4.4.4/24<br>- Task will configure the IP address only on the first `vlan_ids` from the list or can be used `vlan_id`                                                                              |
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Sample playbook task</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       - name: "vlan trunk mode on interfaces"
          sonic_vlan:
@@ -426,13 +426,13 @@ ________________________________________________________________________________
 ________________________________________________________________________________________________________________________
 
 # Portchannel
-           Configure and delete multiple port-channel.
+      Configure and delete multiple port-channel.
 
-           To configure port-channel, execute the task with the module 
+      To configure port-channel, execute the task with the module 
 `sonic_port_channel`. Provide the configuration data as a list under the “**config**” key. Here “**pch_id**” is 
 the primary key.
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Supported keys/arguments - value:</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
 
 | key         | description                                                                                                                                                                                                                                                                            |
 |-------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -441,7 +441,7 @@ the primary key.
 | description | - portchannel description                                                                                                                                                                                                                                                              |
 | mode        | - only supported value for the mode is "**active**"<br>- with active mode, it will configure the channel group or add members to the portchannel<br>- if mode argument not passed, it will not configure the members to the portchannel or remove the members from the portchannel<br> |
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Sample playbook task</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       - name: "create a port-channel"
          sonic_port_channel:
@@ -463,12 +463,12 @@ ________________________________________________________________________________
 
 # BGP
 ## &nbsp;&nbsp;1. BGP router
-           To configure the BGP router, execute the task with the module `sonic_bgp`.
+      To configure the BGP router, execute the task with the module `sonic_bgp`.
 Provide the configuration data as a list under the “**config**” key. Here “**bgp_asn**” is the primary key.
 
 A BGP configuration data list should be under the key “**bgp**”.
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Supported keys/arguments - value:</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
 
 | key                                                   | description                                                                                                                                                                                                                                                                                                                                                |
 |-------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -480,7 +480,7 @@ A BGP configuration data list should be under the key “**bgp**”.
 | bgp:<br>&nbsp;&nbsp;&nbsp;&nbsp; stalepath_time       | - configure bgp graceful restart with stalepath-time in second<br>- **Ex:** 10<br>- command: **bgp graceful-restart stalepath-time 10**                                                                                                                                                                                                                    |
 
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Sample playbook task</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       - name: Sonic BGP router config
          sonic_bgp:
@@ -493,13 +493,13 @@ A BGP configuration data list should be under the key “**bgp**”.
 
 ________________________________________________________________________________________________________________________
 ## &nbsp;&nbsp;2. bgp_neighbors(IPv4)
-           To configure the bgp_neighbors, execute the task with the module 
+      To configure the bgp_neighbors, execute the task with the module 
 `sonic_bgp_neighbor`. Provide the configuration data as a list under the “**config**” key. Here “**bgp_asn**” is the 
 primary key.
 
 bgp_neighbor ipv4 configuration data list should be under the key “**neighbor: ipv4:**”.
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Supported keys/arguments - value:</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
 
 | key                                                                                                              | description                                                                                                                                                                                   |
 |------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -509,7 +509,7 @@ bgp_neighbor ipv4 configuration data list should be under the key “**neighbor:
 | neighbor:<br>&nbsp;&nbsp;&nbsp;&nbsp; ipv4:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; extended_nexthop | - extended next-hop boolean type, **true** or **false**<br>- default value is false<br>- Shutdown the BGP neighbor<br>- command: **neighbor 10.10.10.2 capability extended-nexthop**          |
 
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Sample playbook task</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       - name: Sonic BGP neighbor config
          sonic_bgp_neighbor:
@@ -524,11 +524,11 @@ bgp_neighbor ipv4 configuration data list should be under the key “**neighbor:
 ________________________________________________________________________________________________________________________
 
 ## &nbsp;&nbsp;3. bgp_route_maps
-           To configure bgp route maps, execute the task with the module 
+      To configure bgp route maps, execute the task with the module 
 `sonic_bgp_route_maps`. Provide the configuration data as a list under the “**config**” key. Here “**map_name**” 
 is the primary key.
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Supported keys/arguments - value:</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
 
 | key                                 | description                                                                                            |
 |-------------------------------------|--------------------------------------------------------------------------------------------------------|
@@ -538,7 +538,7 @@ is the primary key.
 | set:<br>&nbsp;&nbsp;&nbsp;&nbsp; ip | - set the source ip<br>- command: **set src 10.10.10.2**                                               |
 
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Sample playbook task</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       - name: Sonic route map config
          sonic_bgp_route_maps:
@@ -551,11 +551,11 @@ is the primary key.
 
 ________________________________________________________________________________________________________________________
 ## &nbsp;&nbsp;4. bgp_address_family
-           To configure bgp address family, execute the task with the module 
+      To configure bgp address family, execute the task with the module 
 `sonic_bgp_address_family`. Provide the configuration data as a list under the “**config**” key. Here “**bgp_asn**” is 
 the primary key.
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Supported keys/arguments - value:</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
 
 | key                                                                                     | description                                                                                                                                                                                                                                                                                                                                                                                                         |
 |-----------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -566,8 +566,8 @@ the primary key.
 | address_family:<br>. . ipv4:<br>. . . . neighbor:<br>. . . . . . next_hop_self          | - Next hop<br>- Set local router as next-hop for routes received from the peer group, affecting routing within the autonomous system (AS). Optional "force" modifies next-hop for eBGP-learned routes<br>- boolean type, **true** or **false**<br>- command: **neighbor 40.0.0.11 next-hop-self force**                                                                                                             |
 | address_family:<br>. . ipv4:<br>. . . . network                                         | - Configures an IP v4 prefix for advertisement<br>- IPv4 Address - Router IP address with masklen<br>- **Ex:** ["10.10.10.2/31", "10.10.10.3/31"]<br>- command: **network 10.10.10.2/31**                                                                                                                                                                                                                           |
 | address_family:<br>. . ipv4:<br>. . . . redistribute                                    | - This command enables the redistribution of connected or static routes into the BGP routing table, allowing them to be advertised to BGP peers and become part of the BGP routing decision process<br>- value accepted for the argument `redistribute` is **connected** and **static** in a list<br>**Ex:** ["connected", "static"]<br>- command: **redistribute connected**<br>- command: **redistribute static** |
-|                                                                                         |                                                                                                                                                                                                                                                                                                                                                                                                                     |
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Sample playbook task</u>**
+
+**&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       - name: Sonic router BGP config
          sonic_bgp_address_family:
@@ -585,11 +585,11 @@ ________________________________________________________________________________
 ________________________________________________________________________________________________________________________
 
 # MLAG
-           Multi-Chassis Link Aggregation Group, executes the task with the module 
+      Multi-Chassis Link Aggregation Group, executes the task with the module 
 `sonic_mlag`. Provide the configuration data as a list under the “**config**” key. Here “**domain_id**” is the 
 primary key.
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Supported keys/arguments - value:</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
 
 | key                 | description                                                                                                                                                                                                                                                                                                                                                                                                                    |
 |---------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -600,7 +600,7 @@ primary key.
 | member_portchannels | - Configures a port-channel as a member of the MLAG for enhanced redundancy and load balancing<br>- Provide the list of port_channel<br>**Ex:** ["portchannel20", "pch10"]                                                                                                                                                                                                                                                     |
 | local_interface     | - Provide a VLAN id. **Ex:** 100<br>- Configures a VLAN as the local interface for MLAG, allowing the MLAG-enabled switches to communicate and synchronize information for **enhanced redundancy** and **load balancing** within the specified VLAN                                                                                                                                                                            |
 
-**&nbsp;&nbsp;&nbsp;&nbsp; <u>Sample playbook task</u>**
+**&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
  
 
