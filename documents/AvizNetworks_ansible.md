@@ -15,21 +15,21 @@ ________________________________________________________
 **&nbsp;&nbsp;&nbsp;&nbsp; Day-1 Configuration**
 
     - name: SONiC port configuration
-        sonic_interfaces:
-            config:
-                - interfaces: ["Ethernet32", "Ethernet4"]
-                  mtu: 9000
-                  enable: True
+      sonic_interfaces:
+         config:
+             - interfaces: ["Ethernet32", "Ethernet4"]
+               mtu: 9000
+               enable: True
 
 **&nbsp;&nbsp;&nbsp;&nbsp; Day-2 Configuration**
     
     - name: SONiC port configuration
-        sonic_interfaces:
-            config:
-                - interfaces: ["Ethernet32"]
-                  mtu: 9100
-                  enable: True
-                  description: "fmcli description_eth32"
+      sonic_interfaces:
+         config:
+             - interfaces: ["Ethernet32"]
+               mtu: 9100
+               enable: True
+               description: "fmcli description_eth32"
     
 
     In the example above, on `day-2 ... days-n` configuration, updating the MTU and configure 
@@ -64,8 +64,8 @@ configurations.
     # day-0
 
     - name: SONiC port configuration
-         sonic_interfaces:
-           config:
+      sonic_interfaces:
+         config:
              - interfaces: ["Ethernet32"]
                mtu: 9000
                enable: True
@@ -83,13 +83,13 @@ configurations.
     # day-n  
     
     - name: SONiC port configuration
-         sonic_interfaces:
-           config:
+      sonic_interfaces:
+         config:
              - interfaces: ["Ethernet32"]
                mtu: 9000
                ip_address: 40.0.0.10/31 # new configuration
                description: "fmcli description_eth32"
-           state: merge  # default
+         state: merge  # default
 
 
      In this configuration, it will check if any configuration exists it will get overridden and if 
@@ -134,20 +134,20 @@ it does not exist it will get added as a new configuration.
     # day-0
 
     - name: SONiC port configuration
-         sonic_interfaces:
-           config:
+      sonic_interfaces:
+         config:
              - interfaces: ["Ethernet32", "Ethernet36"]
                mtu: 9000
                enable: True
                description: "fmcli description"
-           state: merge  # default
+         state: merge  # default
 
     ____________________________________________________________________________________________________________________
 
     # day-n delete some config. Ex: delete the description for the interfaces
 
     - name: SONiC port configuration
-         sonic_interfaces:
+      sonic_interfaces:
            config:
              - interfaces: ["Ethernet32", "Ethernet36"]
                description: "fmcli description"
@@ -197,7 +197,7 @@ it does not exist it will get added as a new configuration.
     # day-0, day-1, ...
 
     - name: SONiC port configuration
-        sonic_interfaces:
+      sonic_interfaces:
            config:
              - interfaces: ["Ethernet32", "Ethernet36"]
                mtu: 9000
@@ -290,7 +290,7 @@ data as a list under the “**config**” key. Here “**interface**” is the p
 **&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       - name: SONiC port configuration
-         sonic_interfaces:
+        sonic_interfaces:
            config:
                - interface: ["Ethernet32", "Ethernet4"]
                  mtu: 9000
@@ -326,7 +326,7 @@ primary key.
 
       # task 1: add or merge the loopback configuration
       - name: SONiC loopback configuration merge
-           sonic_loopback:
+        sonic_loopback:
              config:
                - loopback: 1
                  ip_address: 10.4.5.8/23
@@ -337,7 +337,7 @@ primary key.
     
      # task 2: delete the loopback 1 configuration
      - name: SONiC loopback configuration delete
-          sonic_loopback:
+       sonic_loopback:
             config:
                - loopback: 1
                  state: delete # delete loopback 1
@@ -346,7 +346,7 @@ primary key.
       
      # task 3: delete the ip_address from loopback 2 configuration
      - name: SONiC loopback configuration delete
-         sonic_loopback:
+       sonic_loopback:
             config:
                - loopback: 2
                  ip_address: 10.4.5.7/23
@@ -356,7 +356,7 @@ primary key.
       
      # task 4: delete the loopback 1 and loopback 2 configuration
      - name: SONiC loopback configuration delete
-         sonic_loopback:
+       sonic_loopback:
             config:
                - loopback: 1
                - loopback: 2
@@ -390,7 +390,7 @@ configuration data as a list under the “**config**” key. Here “**vlan_ids*
 **&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       - name: "vlan trunk mode on interfaces"
-         sonic_vlan:
+        sonic_vlan:
             config:
                - vlan_ids: [20, 30, 35-37]  # [20, 30, 35, 36, 37]
                  vlan_mode: "trunk"
@@ -399,8 +399,8 @@ configuration data as a list under the “**config**” key. Here “**vlan_ids*
     ____________________________________________________________________________________________________________________
 
       - name: "vlan access mode on interfaces"
-           sonic_vlan:
-             config:
+        sonic_vlan:
+            config:
                - vlan_id: 50
                  vlan_mode: "access"
                  interfaces: ["Ethernet204"]
@@ -408,8 +408,8 @@ configuration data as a list under the “**config**” key. Here “**vlan_ids*
     ____________________________________________________________________________________________________________________
 
       - name: "vlan trunk mode on portchannel"
-           sonic_vlan:
-             config:
+        sonic_vlan:
+            config:
                - vlan_ids: [20, 30, 40]  # [20, 30, 35-37]
                  vlan_mode: "trunk"
                  interfaces: ["portchannel300", "pch200"]
@@ -417,8 +417,8 @@ configuration data as a list under the “**config**” key. Here “**vlan_ids*
     ____________________________________________________________________________________________________________________      
       
       - name: "vlan ip_address configuration"
-           sonic_vlan:
-             config:
+        sonic_vlan:
+            config:
                - vlan_ids: [20]  #make sure provide one vlan id for SVI
                  ip_address: "100.10.0.5/25"
 
@@ -444,14 +444,14 @@ the primary key.
 **&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       - name: "create a port-channel"
-         sonic_port_channel:
+        sonic_port_channel:
             config:
                - pch_id: 100
       
     ____________________________________________________________________________________________________________________
 
       - name: "Add member port to port-channel"
-         sonic_port_channel:
+        sonic_port_channel:
             config:
                - pch_id: 200
                  interfaces: ["Ethernet216"]
@@ -483,7 +483,7 @@ A BGP configuration data list should be under the key “**bgp**”.
 **&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       - name: Sonic BGP router config
-         sonic_bgp:
+        sonic_bgp:
             config:
                bgp_asn: 1001
                bgp:
@@ -512,7 +512,7 @@ bgp_neighbor ipv4 configuration data list should be under the key “**neighbor:
 **&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       - name: Sonic BGP neighbor config
-         sonic_bgp_neighbor:
+        sonic_bgp_neighbor:
             config:
                - bgp_asn: 1001
                  neighbor:
@@ -541,7 +541,7 @@ is the primary key.
 **&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       - name: Sonic route map config
-         sonic_bgp_route_maps:
+        sonic_bgp_route_maps:
             config:
                - map_name: "RM_SET_SRC"
                  action: permit
@@ -570,7 +570,7 @@ the primary key.
 **&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
       - name: Sonic router BGP config
-         sonic_bgp_address_family:
+        sonic_bgp_address_family:
             config:
                - bgp_asn: 1001
                  address_family: # address-family
@@ -602,7 +602,15 @@ primary key.
 
 **&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
- 
+       - name: "Sonic Mlag creation "
+         sonic_mlag:
+            config:
+               - domain_id: 1
+                 peer_address: 192.168.0.3
+                 peer_link: "portchannel999"
+                 src_address: 192.168.0.2
+                 member_portchannels: ['portchannel201','portchannel202', 'pch501']
+                 local_interface: 10
 
 
 ________________________________________________________________________________________________________________________

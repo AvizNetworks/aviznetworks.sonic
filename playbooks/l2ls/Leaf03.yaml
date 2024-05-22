@@ -1,0 +1,66 @@
+- name: "Leaf01 Configuration"
+  hosts: leaf01
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic
+
+  tasks:
+
+    - name: "vlan creation and add vlan on portchanel"
+      sonic_vlan:
+        config:
+          - vlan_id: 10
+            ip_address: 192.168.0.4/31
+            vlan_mode: "trunk"
+            interfaces: ["portchannel999"]
+
+          - vlan_ids: ["203"]
+            vlan_mode: "trunk"
+            interfaces: ["pch203", "pch502", "portchannel999"]
+
+          - vlan_ids: ["204"]
+            vlan_mode: "trunk"
+            interfaces: ["pch204", "pch502", "portchannel999"]
+            
+    - name: "adding member interfaces to portchannel"
+      sonic_port_channel:
+        config:
+          - pch_id: 203 # member portchannel
+            mtu: '9000'
+            interfaces: ["Ethernet0"]
+            mode: "active"
+
+          - pch_id: 204 # member portchannel
+            mtu: '9000'
+            interfaces: ["Ethernet8"]
+            mode: "active"
+          
+          - pch_id: 502  # member portchannel
+            mtu: '9000'
+            interfaces: ["Ethernet32", "Ethernet40"]
+            mode: "active"
+          
+          - pch_id: 999  # peer link portchannel
+            mtu: '9000'
+            interfaces: ["Ethernet56"]
+            mode: "active"
+
+
+    - name: SONiC port configuration
+      sonic_interfaces:
+        config:
+          - interfaces: ["Ethernet0", "Ethernet8", "Ethernet32", "Ethernet40", "Ethernet56"]
+            enable: true
+            mtu: '9000'
+            fec: none
+
+    - name: "Sonic Mlag creation "
+      sonic_mlag:
+        config:
+          - domain_id: 1
+            peer_address: 192.168.0.5
+            peer_link: "portchannel999"
+            src_address: 192.168.0.4
+            member_portchannels: ['portchannel203','portchannel204', 'pch502']
+            local_interface: 10

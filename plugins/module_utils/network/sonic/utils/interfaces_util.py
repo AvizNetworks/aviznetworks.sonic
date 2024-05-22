@@ -131,11 +131,11 @@ def config_description(module_config, config_list, diff=None, key=""):
 
 def config_fec(module_config, config_list, diff={}, key=""):
     commands = []
-    cmd = f"fec {module_config['fec']}"
+    cmd = f"forward-error-correction {module_config['fec']}"
     if cmd in config_list:
         pass
-    elif substring_starstwith_check("fec", config_list):
-        cmd_dlt = get_substring_starstwith_matched_item_list("fec", config_list)
+    elif substring_starstwith_check("forward-error-correction", config_list):
+        cmd_dlt = get_substring_starstwith_matched_item_list("forward-error-correction", config_list)
         commands.append(cmd)
         diff["interfaces"][key].append(f"- {cmd_dlt}")
         diff["interfaces"][key].append(f"+ {cmd}")
