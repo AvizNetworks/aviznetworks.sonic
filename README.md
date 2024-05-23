@@ -19,17 +19,18 @@ Supported operations are ***merge*** and ***delete***.
 
 [**Collection core modules**](../aviznetworks.sonic/documents/AvizNetworks_ansible.md)
 ------------------------
-Name | Description | Connection type
---- | --- | ---
-**sonic_bgp**| Manage global BGP and its parameters|network_cli
-**sonic_bgp_address_family**| Manage global BGP address-family and its parameters|network_cli
-**sonic_bgp_neighbor**| Manage a BGP neighbor and its parameters|network_cli
-**sonic_bgp_route_maps**| Manage route map configuration|network_cli
-**sonic_interfaces**| Configure Interface attributes|network_cli
-**sonic_mlag**| Manage multi chassis link aggregation groups domain (MCLAG) and its parameters|network_cli
-**sonic_vlan**| Manage VLAN and its parameters|network_cli
-**sonic_port_channel**| Manage portchannel and its parameters|network_cli
-**sonic_loopback**| Manage loopback and its parameters|network_cli
+| Name                         | Description                                                                    | Connection type |
+|------------------------------|--------------------------------------------------------------------------------|-----------------|
+| **sonic_commands**           | Execute list of commands under fmcli prompt                                    | network_cli     |
+| **sonic_bgp**                | Manage global BGP and its parameters                                           | network_cli     |
+| **sonic_bgp_address_family** | Manage global BGP address-family and its parameters                            | network_cli     |
+| **sonic_bgp_neighbor**       | Manage a BGP neighbor and its parameters                                       | network_cli     |
+| **sonic_bgp_route_maps**     | Manage route map configuration                                                 | network_cli     |
+| **sonic_interfaces**         | Configure Interface attributes                                                 | network_cli     |
+| **sonic_mlag**               | Manage multi chassis link aggregation groups domain (MCLAG) and its parameters | network_cli     |
+| **sonic_vlan**               | Manage VLAN and its parameters                                                 | network_cli     |
+| **sonic_port_channel**       | Manage portchannel and its parameters                                          | network_cli     |
+| **sonic_loopback**           | Manage loopback and its parameters                                             | network_cli     |
 
 Sample use case playbooks
 -------------------------
