@@ -1,0 +1,15 @@
+---
+- name: "FMCLI Ports Configuration "
+  hosts: leaf01 # 10.4.4.66, 10.4.4.68
+  gather_facts: no
+  connection: network_cli
+  collections:
+    - aviznetworks.sonic
+
+  tasks:
+
+  - name: SONiC port configuration with wait_for and match=any
+    sonic_commands:
+      config:
+        - commands: ["config", "no mlag domain-id 1", "end", "save"]
+        - commands: ["config", "no interface vlan 10", "end", "save", "show run"]
