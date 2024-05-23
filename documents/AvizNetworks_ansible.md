@@ -269,6 +269,29 @@ it does not exist it will get added as a new configuration.
 ________________________________________________________________________________________________________________________
 ________________________________________________________________________________________________________________________
 
+# sonic commands
+    This module supports the execution of list of commands inside fmcli prompt.
+
+    Executes the task with the module `sonic_commands`. Provide the configuration
+data as a list under the “**config**” key. Here “**interface**” is the primary key.
+
+**&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
+
+| key      | description                                                                                         |
+|----------|-----------------------------------------------------------------------------------------------------|
+| commands | - a primary key argument<br>- list of commands Ex: ["config", "no mlag domain-id 1", "end", "save"] |
+
+**&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
+
+      - name: SONiC port configuration with wait_for and match=any
+        sonic_commands:
+          config:
+            - commands: ["config", "no mlag domain-id 1", "end", "save"]
+            - commands: ["config", "no interface vlan 10", "end", "save", "show run"]
+
+________________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________
+
 # Ports/Interface
     Configuring and deleting multiple interfaces.
 
