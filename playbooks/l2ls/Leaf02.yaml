@@ -1,4 +1,4 @@
-- name: "Leaf01 Configuration"
+- name: "Leaf02 Configuration"
   hosts: leaf02
   gather_facts: no
   connection: network_cli

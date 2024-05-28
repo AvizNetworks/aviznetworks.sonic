@@ -1,4 +1,4 @@
-- name: "Leaf01 Configuration"
+- name: "Spine01 Configuration"
   hosts: spine01
   gather_facts: no
   connection: network_cli

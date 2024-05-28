@@ -296,7 +296,7 @@ ________________________________________________________________________________
     Configuring and deleting multiple interfaces.
 
     Executes the task with the module `sonic_interfaces`. Provide the configuration
-data as a list under the “**config**” key. Here “**interface**” is the primary key.
+data as a list under the “**config**” key. Here “**interfaces**” is the primary key.
 
 **&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
 
@@ -315,11 +315,11 @@ data as a list under the “**config**” key. Here “**interface**” is the p
       - name: SONiC port configuration
         sonic_interfaces:
            config:
-               - interface: ["Ethernet32", "Ethernet4"]
+               - interfaces: ["Ethernet32", "Ethernet4"]
                  mtu: 9000
                  enable: true
                  description: "fmcli description_port"
-               - interface: 'Ethernet36'
+               - interfaces: 'Ethernet36'
                  mtu: 9000
                  fec: rs
                  enable: false
@@ -635,6 +635,70 @@ primary key.
                  member_portchannels: ['portchannel201','portchannel202', 'pch501']
                  local_interface: 10
 
+
+________________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________
+
+# sonic snmp
+    Simple Network Management Protocol (SNMP) is an Internet Standard protocol for collecting and organizing information about managed devices on IP networks and for modifying that information to change device behavior.
+
+    Executes the task with the module `sonic_snmp`. Provide the configuration
+data as a list under the “**config**” key.
+
+**&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
+
+| key                                              | description                                                        |
+|--------------------------------------------------|--------------------------------------------------------------------|
+| agent:<br>&nbsp;&nbsp;&nbsp;&nbsp; ipv4          | - ipv4 ip for SNMP agent configuration<br>- **Ex:** "10.20.3.4"    |
+| agent:<br>&nbsp;&nbsp;&nbsp;&nbsp; ipv6          | - ipv6 ip for SNMP agent configuration                             |
+| agent:<br>&nbsp;&nbsp;&nbsp;&nbsp; port          | - port number for agent configuration<br>- **Ex:** 49              |
+| agent:<br>&nbsp;&nbsp;&nbsp;&nbsp; vrf_name      | - vrf name for agent configuration<br>- **Ex:** Vrf1               |
+|                                                  |                                                                    |
+| trap:<br>&nbsp;&nbsp;&nbsp;&nbsp; ipv4           | - ipv4 ip for SNMP trap configuration<br>- **Ex:** "10.20.3.4"     |
+| trap:<br>&nbsp;&nbsp;&nbsp;&nbsp; ipv6           | - ipv6 ip for SNMP trap configuration                              |
+| trap:<br>&nbsp;&nbsp;&nbsp;&nbsp; modify_version | - modify_version number for SNMP trap configuration<br>- **Ex:** 2 |
+| trap:<br>&nbsp;&nbsp;&nbsp;&nbsp; port           | - port number for trap configuration<br>- **Ex:** 49               |
+| trap:<br>&nbsp;&nbsp;&nbsp;&nbsp; vrf_name       | - vrf name for trap configuration<br>- **Ex:** Vrf1                |
+| trap:<br>&nbsp;&nbsp;&nbsp;&nbsp; community      | - community ip for SNMP trap configuration<br>- **Ex:** "public"   |
+
+
+
+**&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
+
+      - name: snmp config
+          sonic_snmp:
+            config:
+               trap:
+                  modify_version: 2
+                  ipv4: "10.4.5.4"
+                  port: 22
+                  vrf_name: vrf1
+                  community: public
+
+________________________________________________________________________________________________________________________
+________________________________________________________________________________________________________________________
+
+# sonic ntp
+    The Network Time Protocol (NTP) is used to synchronize the internal clocks of network devices.
+
+    Executes the task with the module `sonic_ntp`. Provide the configuration
+data as a dictionary data under the “**config**” key.
+
+**&nbsp;&nbsp;&nbsp;&nbsp; Supported keys/arguments - value:**
+
+| key      | description                                              |
+|----------|----------------------------------------------------------|
+| ipv4     | - NTP server configuration<br>- **Ex:** ["10.4.5.4"]     |
+| ipv6     | - NTP server configuration<br>- **Ex:** [ipv6 address]   |
+| timezone | - NTP server configuration<br>- **Ex:** ["Asia/Kolkata"] |
+
+**&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
+
+      - name: "ntp server and timezone"
+          sonic_ntp:
+            config:
+               ipv4: "10.4.5.4"
+               timezone: "Asia/Kolkata"
 
 ________________________________________________________________________________________________________________________
 ________________________________________________________________________________________________________________________
