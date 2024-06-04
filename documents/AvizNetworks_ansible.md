@@ -283,7 +283,7 @@ data as a list under the “**config**” key. Here “**interface**” is the p
 
 **&nbsp;&nbsp;&nbsp;&nbsp; Sample playbook task**
 
-      - name: SONiC port configuration with wait_for and match=any
+      - name: SONiC configuration with commands
         sonic_commands:
           config:
             - commands: ["config", "no mlag domain-id 1", "end", "save"]
