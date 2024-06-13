@@ -1,11 +1,13 @@
-Ansible Collection by Aviz Networks India Pvt. Ltd. for Community/Enterprise SONiC Distribution 
-=================================================================================
+Ansible Collection SONiC Distribution 
+======================================
 
-It includes Ansible core modules to provision and manage the Siwtch running Community/Enterprise SONiC Distribution. Sample playbooks and documentation are also included to show how the collection can be used.
+The Aviz SONiC Ansible collection includes ansible modules for provisioning and managing SONiC switches using Community or Enterprise SONiC Distribution. 
+
+The package also contains sample playbooks and documentation to demonstrate its usage.
 
 Supported connections
 ---------------------
-The SONiC Ansible collection supports network_cli connections over AVIZ ISCLI prompt.
+The SONiC Ansible collection supports network_cli connections over Aviz ISCLI (Industry Standard CLI) .
 
 Plugins
 --------
