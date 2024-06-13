@@ -1,7 +1,7 @@
 Aviz SONiC Ansible Collection
 =============================
 
-The Aviz SONiC Ansible collection includes ansible modules for provisioning and managing SONiC switches using Community or Enterprise SONiC Distribution. 
+The Aviz SONiC Ansible collection includes ansible modules for provisioning and managing SONiC switches using community or enterprise SONiC distributions. 
 
 The package also contains sample playbooks and documentation to demonstrate its usage.
 
