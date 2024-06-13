@@ -1,5 +1,5 @@
-Ansible Collection SONiC Distribution 
-======================================
+Aviz SONiC Ansible Collection
+=============================
 
 The Aviz SONiC Ansible collection includes ansible modules for provisioning and managing SONiC switches using Community or Enterprise SONiC Distribution. 
 
@@ -7,7 +7,7 @@ The package also contains sample playbooks and documentation to demonstrate its 
 
 Supported connections
 ---------------------
-The SONiC Ansible collection supports network_cli connections over Aviz ISCLI (Industry Standard CLI) .
+The SONiC Ansible collection supports `network_cli` connections over Aviz ISCLI (Industry Standard CLI) .
 
 Plugins
 --------
@@ -15,7 +15,7 @@ Plugins
 
 Name | Description
 --- | ---
-[network_cli](https://github.com/AvizNetworks/aviznetworks.sonic)|Use Ansible CLICONF to run commands on AVIZ ISCLI prompt in SONiC.
+[network_cli](https://github.com/AvizNetworks/aviznetworks.sonic)|Use Ansible CLICONF to run commands on SONiC.
 Supported operations are ***merge*** and ***delete***.
 
 
@@ -27,7 +27,7 @@ Name | Description | Connection type
 [**sonic_bgp_address_family**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.vd4rjdnryqjy)| Manage global BGP address-family and its parameters|network_cli
 [**sonic_bgp_neighbor**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.h9q3wwm9xjjm)| Manage a BGP neighbor and its parameters|network_cli
 [**sonic_bgp_route_maps**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.xzsodu287jkb)| Manage route map configuration|network_cli
-[**sonic_interfaces**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.drhxo0crwc9q)| Configure Interface attributes|network_cli
+[**sonic_interfaces**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.drhxo0crwc9q)| Configure interface attributes|network_cli
 [**sonic_mclag**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.uc2upy5nnyxz)| Manage multi chassis link aggregation groups domain (MCLAG) and its parameters|network_cli
 [**sonic_vlan**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.uc2upy5nnyxz)| Manage VLAN and its parameters|network_cli
 [**sonic_port_channel**](https://docs.google.com/document/d/13E0sJ5-RrY0_qBQD5Ib3uhcWxBGF_P_IJJClMOax8ig/edit?pli=1#heading=h.uc2upy5nnyxz)| Manage portchannel and its parameters|network_cli
@@ -56,7 +56,7 @@ Download Ansible-collection
 
 Setting Environment for the playbook execution
 ----------------------------------------------
-Post downloading the ansible collection, open a terminal, change directory to aviznetworks.sonic and execute the command ***sudo sh rebuild.sh***
+Post downloading the ansible collection, open a terminal, change directory to aviznetworks.sonic and execute the command `sudo sh rebuild.sh`
 
 Sample playbooks
 -----------------
@@ -127,6 +127,6 @@ Sample playbooks
 
 
 
-***command to run***
+***Command to run***
 
     ansible-playbook playbooks/sonic_leaf1.yaml -i inventory/hosts -vvv
