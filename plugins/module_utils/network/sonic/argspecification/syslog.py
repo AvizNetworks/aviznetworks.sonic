@@ -3,8 +3,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-class VlanArgs(object):
-    """The arg spec for the sonic_vlan module
+class SyslogArgs(object):
+    """The arg spec for the sonic_syslog module
+
     """
 
     def __init__(self, **kwargs):
@@ -14,16 +15,7 @@ class VlanArgs(object):
         "config": {
             "elements": "dict",
             "options": {
-                "vlan_ids": {"type": "list"},
-                "vlan_id": {"type": "str"},
-                "name": {"type": "str"},
-                # "description": {"type": "str", "default": ""},
-                "vrf_name": {"type": "str", "default": ""},
-                "interfaces": {"type": "list", "default": []},  # portchannel10 / Ethernet10
-                "vlan_mode": {"type": "str", "default": ""},
-                "pch_ids": {"type": "list", "default": []},
-                "ip_address": {"type": "str"},  # 10.4.4.4/24
-                "anycast_gateway": {"type": "str"}  # 10.4.4.4/24
+                "ip": {"type": "str", "default": ""}
             },
             "type": "list"
         },

@@ -1,6 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
 # Copyright: (c) 2020, Peter Sprygada <psprygada@ansible.com>
 # Copyright: (c) 2024, Aviz Networks
 
@@ -22,10 +21,9 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.sonic import run_commands
 from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.utils import \
     command_list_str_to_dict
-from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.configs.bgp_address_family import \
-    BGPAddressFamilyConfig
-from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.argspecification.bgp_address_family import \
-    BGPAddressFamilyArgs
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.configs.evpn_mh import EvpnMHConfig
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.argspecification.evpn_mh import \
+    EvpnMHArgs
 
 
 def transform_commands_dict(module, commands_dict):
@@ -45,8 +43,8 @@ def transform_commands_dict(module, commands_dict):
     return transform(commands_dict)
 
 
-def parse_commands(module, warnings):
-    commands_dict = command_list_str_to_dict(module, warnings, module.params["commands"])
+def parse_commands(module, warnings, commands):
+    commands_dict = command_list_str_to_dict(module, warnings, commands)
     commands = transform_commands_dict(module, commands_dict)
     return commands
 
@@ -54,24 +52,23 @@ def parse_commands(module, warnings):
 def main():
     """main entry point for module execution
     """
-    module = AnsibleModule(argument_spec=BGPAddressFamilyArgs.argument_spec, supports_check_mode=True)
+    module = AnsibleModule(argument_spec=EvpnMHArgs.argument_spec, supports_check_mode=True)
 
-    # ansible_host = list(module.params.keys())
-    # with open("fmcli_hosts_data.txt", "w") as f:
-    #         ansible_host = ", ".join(ansible_host)
-    #         f.write(ansible_host)
-    # responses = run_commands(module, ["show run"])
+    ansible_host = list(module.params.keys())
+    with open("fmcli_hosts_data.txt", "w") as f:
+        ansible_host = ", ".join(ansible_host)
+        f.write(ansible_host)
+    responses = run_commands(module, ["show run"])
 
-    commands = list()
-    commands, diff = BGPAddressFamilyConfig().get_config_commands(module, get_current_config=True)
+    commands, diff = EvpnMHConfig().get_config_commands(module, get_current_config=True)
+
     module.params['commands'] = commands
     module.params['diff'] = diff
 
     result = {'changed': False}
 
     warnings = list()
-    # print(f"commands: {module.params}")
-    commands = parse_commands(module, warnings)
+    commands = parse_commands(module, warnings, commands)
     result['warnings'] = warnings
 
     wait_for = module.params['wait_for'] or list()

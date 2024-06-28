@@ -22,10 +22,8 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.sonic import run_commands
 from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.utils.utils import \
     command_list_str_to_dict
-from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.configs.bgp_address_family import \
-    BGPAddressFamilyConfig
-from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.argspecification.bgp_address_family import \
-    BGPAddressFamilyArgs
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.configs.sag import SAGConfig
+from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.argspecification.sag import SAGArgs
 
 
 def transform_commands_dict(module, commands_dict):
@@ -54,23 +52,18 @@ def parse_commands(module, warnings):
 def main():
     """main entry point for module execution
     """
-    module = AnsibleModule(argument_spec=BGPAddressFamilyArgs.argument_spec, supports_check_mode=True)
-
-    # ansible_host = list(module.params.keys())
-    # with open("fmcli_hosts_data.txt", "w") as f:
-    #         ansible_host = ", ".join(ansible_host)
-    #         f.write(ansible_host)
-    # responses = run_commands(module, ["show run"])
+    module = AnsibleModule(argument_spec=SAGArgs.argument_spec, supports_check_mode=True)
 
     commands = list()
-    commands, diff = BGPAddressFamilyConfig().get_config_commands(module, get_current_config=True)
+    commands, diff = SAGConfig().get_config_commands(module, get_current_config=True)
+
     module.params['commands'] = commands
     module.params['diff'] = diff
 
     result = {'changed': False}
 
     warnings = list()
-    # print(f"commands: {module.params}")
+    print(f"commands: {module.params}")
     commands = parse_commands(module, warnings)
     result['warnings'] = warnings
 
