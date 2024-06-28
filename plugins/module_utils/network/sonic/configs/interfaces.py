@@ -87,7 +87,7 @@ class InterfaceConfig(object):
         commands = []
         module_config_list = module.params['config']
         for module_config in module_config_list:
-            for config_interface in module_config['interface']:
+            for config_interface in module_config['interfaces']:
                 key = f"interface ethernet {config_interface}"
                 self.diff["interfaces"][key] = self.diff["interfaces"].get(key, [])
                 init_config_cmds = ['config terminal', key]

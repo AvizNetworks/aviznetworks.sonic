@@ -1,18 +1,16 @@
 from __future__ import absolute_import, division, print_function
-
-import json
-import re
-
+import re, json
 from ansible_collections.aviznetworks.sonic.plugins.module_utils.network.sonic.sonic import run_commands
 
 
 class SonicConfig(object):
-    
+
     def __init__(self) -> None:
         pass
-    
+
     def fmcli_config_to_json(self, fmcli_conf):
-        fmcli_conf_json = {"metadata": {}, "vlan": {}, "interfaces": {}, "mlag": {},"route_map": {}, "vxlan": {}, "bgp": {}, "sag": {}}
+        fmcli_conf_json = {"metadata": {}, "snmp_server": {}, "vlan": {}, "interfaces": {}, "mlag": {}, "route_map": {},
+                           "vxlan": {}, "bgp": {}, "sag": {}}
 
         with open(fmcli_conf, "r") as fmcli:
             fmcli_conf_lines = fmcli.readlines()
@@ -37,14 +35,17 @@ class SonicConfig(object):
                 ntp_add_ip_regx = f"^ntp\sadd\s{ip_regx}$"
                 clock_timezone_regx = f"^clock\stimezone\s\S+$"
                 syslog_add_ip_regx = f"^syslog\sadd\s{ip_regx}$"
-                snmp_server__ip_regx = f"snmp-server[\s\S]+{ip_regx}[\s\S]+$"
+                snmp_server_regx = f"^snmp-server.*"
                 ip_protocol_bgp_regx = f"^ip\sprotocol\sbgp\sroute\-map\s\S+$"
 
                 if re.match(
-                        f"{hostname_regx}|{router_id_ip_regx}|{ntp_add_ip_regx}|{clock_timezone_regx}|{syslog_add_ip_regx}|{snmp_server__ip_regx}|{ip_protocol_bgp_regx}",
+                        f"{hostname_regx}|{router_id_ip_regx}|{ntp_add_ip_regx}|{clock_timezone_regx}|{syslog_add_ip_regx}|{ip_protocol_bgp_regx}",
                         line):
                     fmcli_conf_json[line] = ""
-                # vlan json data
+
+                elif re.match(snmp_server_regx, line):
+                    fmcli_conf_json["snmp_server"][line] = ""
+
                 elif route_map_config or re.match("^route\-map\s\w+\spermit\s\d+$", line):
                     route_map_config = True
                     if not key:
@@ -120,8 +121,8 @@ class SonicConfig(object):
                             fmcli_conf_json["sag"][key] = []
                     else:
                         fmcli_conf_json["sag"][key].append(line)
-        return fmcli_conf_json 
-    
+        return fmcli_conf_json
+
     def get_running_configs(self, module):
         ansible_host = module.params.get('ansible_host', None)
         running_config_cmd = ["show run"]
@@ -135,8 +136,8 @@ class SonicConfig(object):
             f.write(resp)
 
         fmcli_conf_json = self.fmcli_config_to_json(fmcli_conf)
-        
+
         with open(fmcli_json, "w") as json_f:
             json.dump(fmcli_conf_json, json_f, indent=4)
-        
+
         return fmcli_conf_json
