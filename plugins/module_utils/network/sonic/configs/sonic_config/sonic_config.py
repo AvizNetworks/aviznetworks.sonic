@@ -38,9 +38,8 @@ class SonicConfig(object):
                 snmp_server_regx = f"^snmp-server.*"
                 ip_protocol_bgp_regx = f"^ip\sprotocol\sbgp\sroute\-map\s\S+$"
 
-                if re.match(
-                        f"{hostname_regx}|{router_id_ip_regx}|{ntp_add_ip_regx}|{clock_timezone_regx}|{syslog_add_ip_regx}|{ip_protocol_bgp_regx}",
-                        line):
+                if re.match(f"{hostname_regx}|{router_id_ip_regx}|{ntp_add_ip_regx}|{clock_timezone_regx}|"
+                            f"{syslog_add_ip_regx}|{ip_protocol_bgp_regx}", line):
                     fmcli_conf_json[line] = ""
 
                 elif re.match(snmp_server_regx, line):
@@ -102,7 +101,8 @@ class SonicConfig(object):
                         router_bgp_address_family_config = False
                         inner_key = ""
 
-                    elif router_bgp_address_family_config or re.match("^address-family\s\S+\s[unicast|evpn]+$", line):
+                    elif (router_bgp_address_family_config or
+                          re.match("^address-family\s\S+\s[unicast|evpn]+$", line)):
                         router_bgp_address_family_config = True
                         if not inner_key:
                             inner_key = line
