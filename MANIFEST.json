@@ -1,0 +1,13 @@
+{
+  "collection_info": {
+    "namespace": "aviznetworks",
+    "name": "sonic",
+    "version": "1.0.0"
+  },
+  "file_manifest_file": {
+    "name": "FILES.json",
+    "ftype": "file",
+    "chksum_type": "sha256",
+    "chksum_sha256": ""
+  }
+}
